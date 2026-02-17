@@ -136,8 +136,48 @@ body {
 .header {
   background: linear-gradient(135deg, #d4a373, #bc8a5f);
   color: var(--white);
-  padding: 2rem;
-  text-align: center;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+}
+
+.header-logo {
+  max-width: 150px;
+  height: auto;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.header-right h1 {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.logout-icon {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  padding: 0.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+.logout-icon:hover {
+  background: rgba(255, 255, 255, 0.3);
 }
 
 .header h1 {

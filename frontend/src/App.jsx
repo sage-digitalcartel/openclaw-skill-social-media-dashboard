@@ -280,10 +280,17 @@ function App() {
   return (
     <div className="app">
       <header className="header">
-        <img src="https://simplydesserts.us/wp-content/uploads/2024/09/logo.png" alt="Simply Desserts" style={{maxWidth: '180px', marginBottom: '0.5rem'}} />
-        <h1>Social Media Dashboard</h1>
-        <p>Powered by Metricool</p>
-        <button className="logout-btn" onClick={handleLogout}>Logout</button>
+        <div className="header-left">
+          <img src="https://simplydesserts.us/wp-content/uploads/2024/09/logo.png" alt="Simply Desserts" className="header-logo" />
+        </div>
+        <div className="header-right">
+          <h1>Social Media Management</h1>
+          <button className="logout-icon" onClick={handleLogout} title="Logout">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+              <path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/>
+            </svg>
+          </button>
+        </div>
       </header>
 
       <nav className="nav">
