@@ -164,7 +164,11 @@ function App() {
     return (
       <div className="login-container">
         <div className="login-box">
-          <h1>🔐 Social Media Dashboard</h1>
+          <div className="login-logo">
+            <img src="https://simplydesserts.us/wp-content/uploads/2024/09/logo.png" alt="Simply Desserts" style={{maxWidth: '200px'}} />
+          </div>
+          <h1>Simply Desserts</h1>
+          <p className="subtitle">Social Media Dashboard</p>
           <form onSubmit={handleLogin}>
             <input 
               type="text" 
@@ -178,7 +182,7 @@ function App() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-            <button type="submit">Login</button>
+            <button type="submit">Sign In</button>
           </form>
         </div>
       </div>
@@ -188,7 +192,8 @@ function App() {
   return (
     <div className="app">
       <header className="header">
-        <h1>🚀 Social Media Dashboard</h1>
+        <img src="https://simplydesserts.us/wp-content/uploads/2024/09/logo.png" alt="Simply Desserts" style={{maxWidth: '180px', marginBottom: '0.5rem'}} />
+        <h1>Social Media Dashboard</h1>
         <p>Powered by Metricool</p>
         <button className="logout-btn" onClick={() => setIsAuthenticated(false)}>Logout</button>
       </header>
