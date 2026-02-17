@@ -128,13 +128,16 @@ import requests
 import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
+# Use Host header to make SNI work with IP
+METRICOOL_HEADERS = {"Host": "app.metricool.com"}
+
 @app.get("/api/metricool/channels")
 def get_metricool_channels(api_key: str, user_id: str = "4421531", blog_id: str = "5704319", username: str = Depends(verify_token)):
     """Proxy to Metricool channels API"""
     try:
         resp = requests.get(
             f"{METRICOOL_BASE}/api/v1/channels",
-            headers={"X-Mc-Auth": api_key},
+            headers={**METRICOOL_HEADERS, "X-Mc-Auth": api_key},
             params={"userId": user_id, "blogId": blog_id},
             verify=False
         )
@@ -148,7 +151,7 @@ def create_metricool_post(post_data: dict, api_key: str, user_id: str = "4421531
     try:
         resp = requests.post(
             f"{METRICOOL_BASE}/api/v1/posts",
-            headers={"X-Mc-Auth": api_key},
+            headers={**METRICOOL_HEADERS, "X-Mc-Auth": api_key},
             params={"userId": user_id, "blogId": blog_id},
             json=post_data,
             verify=False
