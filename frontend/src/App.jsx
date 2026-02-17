@@ -87,8 +87,8 @@ export default function App() {
   return (
     <div className="container">
       <header>
-        <h1>LinkedIn Post Dashboard</h1>
-        <p>Preview, approve, and publish LinkedIn posts through OpenClaw automation.</p>
+        <h1>Social Media Post Dashboard</h1>
+        <p>Preview, approve, and publish Social Media posts through OpenClaw automation.</p>
       </header>
 
       <section className="panel">
