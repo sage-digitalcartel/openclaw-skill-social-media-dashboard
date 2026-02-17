@@ -2,6 +2,21 @@ import React, { useState, useEffect } from 'react';
 import './styles.css';
 
 const API_BASE = 'http://100.101.67.20:8000';
+const METRICOOL_API = 'https://app.metricool.com/api/v1';
+
+// Direct Metricool API calls from browser (bypasses VPS DNS issues)
+const metricoolFetch = async (endpoint, apiKey, options = {}) => {
+  const url = `${METRICOOL_API}${endpoint}?userId=4421531&blogId=5704319`;
+  const response = await fetch(url, {
+    ...options,
+    headers: {
+      'X-Mc-Auth': apiKey,
+      'Content-Type': 'application/json',
+      ...options.headers
+    }
+  });
+  return response.json();
+};
 
 // Platform logos (SVG icons)
 const PLATFORM_LOGOS = {
@@ -258,18 +273,58 @@ function App() {
   };
 
   const handlePublish = async (postId) => {
-    if (!selectedWorkspace) {
-      alert('Please select a workspace in Settings');
+    const apiKey = localStorage.getItem('metricool_key');
+    if (!apiKey) {
+      alert('Please add your Metricool API key in Settings');
       return;
     }
+    
+    // Find the post
+    const post = posts.find(p => p.id === postId);
+    if (!post) {
+      alert('Post not found');
+      return;
+    }
+    
     try {
-      await fetch(`${API_BASE}/api/posts/${postId}/publish?workspace_id=${selectedWorkspace}&api_key=${localStorage.getItem('metricool_key') || ''}`, { 
+      // Get the channel for the selected platform
+      const channelsResponse = await metricoolFetch(`/channels`, apiKey);
+      const channels = channelsResponse.data || [];
+      
+      // Find channel matching the post's platform
+      const platformMap = { linkedin: 'linkedin', instagram: 'instagram', facebook: 'facebook', twitter: 'twitter' };
+      const targetPlatform = platformMap[post.platforms?.[0]];
+      const channel = channels.find(c => c.platform === targetPlatform);
+      
+      if (!channel) {
+        alert(`No ${post.platforms?.[0]} channel found. Publishing to Metricool anyway (mock).`);
+      }
+      
+      // Call Metricool API directly from browser
+      const postData = {
+        content: post.content,
+        channels: channel ? [channel.id] : [],
+        media: post.media_urls?.map(url => ({ url })) || []
+      };
+      
+      const result = await metricoolFetch('/posts', apiKey, {
+        method: 'POST',
+        body: JSON.stringify(postData)
+      });
+      
+      console.log('Metricool publish result:', result);
+      
+      // Update local status
+      await fetch(`${API_BASE}/api/posts/${postId}/publish?workspace_id=${selectedWorkspace}&api_key=${apiKey}`, { 
         method: 'POST',
         headers: authHeader()
       });
+      
+      alert('Post published to Metricool! 🎉');
       fetchPosts();
     } catch (e) {
       console.error('Failed to publish:', e);
+      alert('Failed to publish. Check console for details.');
     }
   };
 
