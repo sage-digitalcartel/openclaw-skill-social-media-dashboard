@@ -1,0 +1,13 @@
+
+> social-dashboard-frontend@0.1.0 dev
+> vite --host
+
+Port 5173 is in use, trying another one...
+
+  VITE v5.4.21  ready in 167 ms
+
+  ➜  Local:   http://localhost:5174/
+  ➜  Network: http://49.12.225.84:5174/
+  ➜  Network: http://100.101.67.20:5174/
+  ➜  Network: http://172.18.0.1:5174/
+11:14:17 AM [vite] hmr update /src/App.jsx

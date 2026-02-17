@@ -1,75 +1,100 @@
-import json
+"""
+Metricool API Client for Social Media Dashboard
+"""
+
 import os
-import subprocess
-from typing import Dict, Any
-from datetime import datetime
+import requests
+from typing import Dict, List, Optional
 
-SKILL_PATH = os.getenv(
-    "LINKEDIN_SKILL_PATH",
-    "/home/user/GitRepos/openclaw-skill-social-auto-poster",
-)
-VALIDATE_SCRIPT = os.path.join(SKILL_PATH, "scripts", "validate_config.py")
-OUTBOX_DIR = os.getenv(
-    "LINKEDIN_OUTBOX",
-    "/home/user/GitRepos/social-dashboard/backend/outbox",
-)
+METRICOOL_API_BASE = "https://api.metricool.com"
+
+class MetricoolClient:
+    """Client for interacting with Metricool API"""
+    
+    def __init__(self, api_key: str):
+        self.api_key = api_key
+        self.headers = {
+            "X-Mc-Auth": api_key,
+            "Content-Type": "application/json"
+        }
+    
+    def get_workspaces(self) -> List[Dict]:
+        """Get all workspaces/brands"""
+        response = requests.get(
+            f"{METRICOOL_API_BASE}/workspaces",
+            headers=self.headers
+        )
+        return response.json().get("data", [])
+    
+    def get_channels(self, workspace_id: str) -> List[Dict]:
+        """Get all social channels in a workspace"""
+        response = requests.get(
+            f"{METRICOOL_API_BASE}/workspaces/{workspace_id}/channels",
+            headers=self.headers
+        )
+        return response.json().get("data", [])
+    
+    def create_post(
+        self,
+        workspace_id: str,
+        content: str,
+        channel_ids: List[str],
+        scheduled_time: Optional[str] = None,
+        media_urls: Optional[List[str]] = None
+    ) -> Dict:
+        """Create and optionally schedule a post"""
+        
+        post_data = {
+            "content": content,
+            "channels": channel_ids
+        }
+        
+        if scheduled_time:
+            post_data["scheduled_time"] = scheduled_time
+        
+        if media_urls:
+            post_data["media"] = [{"url": url} for url in media_urls]
+        
+        response = requests.post(
+            f"{METRICOOL_API_BASE}/workspaces/{workspace_id}/posts",
+            headers=self.headers,
+            json=post_data
+        )
+        
+        return response.json()
+    
+    def get_posts(self, workspace_id: str, status: Optional[str] = None) -> List[Dict]:
+        """Get posts for a workspace"""
+        params = {}
+        if status:
+            params["status"] = status
+            
+        response = requests.get(
+            f"{METRICOOL_API_BASE}/workspaces/{workspace_id}/posts",
+            headers=self.headers,
+            params=params
+        )
+        return response.json().get("data", [])
+    
+    def publish_post(self, workspace_id: str, post_id: str) -> Dict:
+        """Publish a scheduled post immediately"""
+        response = requests.post(
+            f"{METRICOOL_API_BASE}/workspaces/{workspace_id}/posts/{post_id}/publish",
+            headers=self.headers
+        )
+        return response.json()
+    
+    def delete_post(self, workspace_id: str, post_id: str) -> Dict:
+        """Delete a post"""
+        response = requests.delete(
+            f"{METRICOOL_API_BASE}/workspaces/{workspace_id}/posts/{post_id}",
+            headers=self.headers
+        )
+        return response.json()
 
 
-class Social MediaSkillError(Exception):
-    pass
-
-
-def render_post_text(config: Dict[str, Any]) -> str:
-    parts = [config["post_text"].strip()]
-    link_url = config.get("link_url")
-    if link_url:
-        parts.append("")
-        parts.append(link_url.strip())
-    hashtags = config.get("hashtags") or []
-    if hashtags:
-        parts.append("")
-        parts.append(" ".join(tag.strip() for tag in hashtags if tag.strip()))
-    return "\n".join(parts).strip() + "\n"
-
-
-def build_config(post: Dict[str, Any], dry_run: bool = False) -> Dict[str, Any]:
-    config = {
-        "page_name": post.get("page_name"),
-        "page_url": post.get("page_url"),
-        "post_text": post["body"],
-        "hashtags": post.get("hashtags") or [],
-        "link_url": post.get("link_url"),
-        "media_paths": post.get("media_paths") or [],
-        "alt_texts": post.get("alt_texts") or [],
-        "schedule": post.get("scheduled_for"),
-        "dry_run": dry_run,
-    }
-    # remove empty keys to satisfy validator
-    config = {k: v for k, v in config.items() if v not in (None, "")}
-    return config
-
-
-def validate_config(config: Dict[str, Any]) -> None:
-    if not os.path.exists(VALIDATE_SCRIPT):
-        raise Social MediaSkillError(f"validate_config.py not found at {VALIDATE_SCRIPT}")
-    os.makedirs(OUTBOX_DIR, exist_ok=True)
-    temp_path = os.path.join(OUTBOX_DIR, "_temp_validation.json")
-    with open(temp_path, "w", encoding="utf-8") as handle:
-        json.dump(config, handle, indent=2)
-    result = subprocess.run(
-        ["python3", VALIDATE_SCRIPT, temp_path],
-        capture_output=True,
-        text=True,
-    )
-    if result.returncode != 0:
-        raise Social MediaSkillError(result.stdout.strip() or result.stderr.strip())
-
-
-def queue_publish(config: Dict[str, Any]) -> str:
-    os.makedirs(OUTBOX_DIR, exist_ok=True)
-    timestamp = datetime.utcnow().strftime("%Y%m%dT%H%M%SZ")
-    filename = f"post_{timestamp}.json"
-    path = os.path.join(OUTBOX_DIR, filename)
-    with open(path, "w", encoding="utf-8") as handle:
-        json.dump(config, handle, indent=2)
-    return path
+def get_client(api_key: Optional[str] = None) -> MetricoolClient:
+    """Get Metricool client instance"""
+    if not api_key:
+        api_key = os.environ.get("METRICOOL_API_KEY", "")
+    return MetricoolClient(api_key)

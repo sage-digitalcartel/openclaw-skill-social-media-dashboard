@@ -10,7 +10,9 @@ function App() {
   const [workspaces, setWorkspaces] = useState([]);
   const [channels, setChannels] = useState([]);
   const [selectedWorkspace, setSelectedWorkspace] = useState('');
-  const [apiKey, setApiKey] = useState('');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [newPost, setNewPost] = useState({
     content: '',
     hashtags: '',
@@ -18,14 +20,13 @@ function App() {
     channels: []
   });
 
-  useEffect(() => {
-    fetchPosts();
-    fetchApiKeys();
-  }, []);
+  const authHeader = () => ({
+    'Authorization': 'Basic ' + btoa(username + ':' + password)
+  });
 
   const fetchPosts = async () => {
     try {
-      const res = await fetch(`${API_BASE}/api/posts`);
+      const res = await fetch(`${API_BASE}/api/posts`, { headers: authHeader() });
       const data = await res.json();
       setPosts(data.posts || []);
     } catch (e) {
@@ -35,7 +36,7 @@ function App() {
 
   const fetchApiKeys = async () => {
     try {
-      const res = await fetch(`${API_BASE}/api/keys`);
+      const res = await fetch(`${API_BASE}/api/keys`, { headers: authHeader() });
       const data = await res.json();
       setApiKeys(data.keys || []);
     } catch (e) {
@@ -44,9 +45,9 @@ function App() {
   };
 
   const fetchWorkspaces = async () => {
-    if (!apiKey) return;
+    if (!username || !password) return;
     try {
-      const res = await fetch(`${API_BASE}/api/workspaces?api_key=${apiKey}`);
+      const res = await fetch(`${API_BASE}/api/workspaces?api_key=${localStorage.getItem('metricool_key') || ''}`, { headers: authHeader() });
       const data = await res.json();
       setWorkspaces(data.workspaces || []);
     } catch (e) {
@@ -55,9 +56,9 @@ function App() {
   };
 
   const fetchChannels = async (workspaceId) => {
-    if (!apiKey || !workspaceId) return;
+    if (!username || !password || !workspaceId) return;
     try {
-      const res = await fetch(`${API_BASE}/api/workspaces/${workspaceId}/channels?api_key=${apiKey}`);
+      const res = await fetch(`${API_BASE}/api/workspaces/${workspaceId}/channels?api_key=${localStorage.getItem('metricool_key') || ''}`, { headers: authHeader() });
       const data = await res.json();
       setChannels(data.channels || []);
     } catch (e) {
@@ -65,15 +66,37 @@ function App() {
     }
   };
 
+  const handleLogin = (e) => {
+    e.preventDefault();
+    // Test credentials
+    fetch(`${API_BASE}/api/posts`, { headers: authHeader() })
+      .then(res => {
+        if (res.ok) {
+          setIsAuthenticated(true);
+          fetchPosts();
+          fetchApiKeys();
+        } else {
+          alert('Invalid credentials');
+        }
+      });
+  };
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      fetchPosts();
+      fetchApiKeys();
+    }
+  }, [isAuthenticated]);
+
   const handleAddApiKey = async (name, key) => {
     try {
       await fetch(`${API_BASE}/api/keys`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { ...authHeader(), 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, key })
       });
+      localStorage.setItem('metricool_key', key);
       fetchApiKeys();
-      setApiKey(key);
     } catch (e) {
       console.error('Failed to add API key:', e);
     }
@@ -91,7 +114,7 @@ function App() {
       
       await fetch(`${API_BASE}/api/posts`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { ...authHeader(), 'Content-Type': 'application/json' },
         body: JSON.stringify(postData)
       });
       
@@ -105,7 +128,7 @@ function App() {
 
   const handleApprove = async (postId) => {
     try {
-      await fetch(`${API_BASE}/api/posts/${postId}/approve`, { method: 'PATCH' });
+      await fetch(`${API_BASE}/api/posts/${postId}/approve`, { method: 'PATCH', headers: authHeader() });
       fetchPosts();
     } catch (e) {
       console.error('Failed to approve:', e);
@@ -113,13 +136,14 @@ function App() {
   };
 
   const handlePublish = async (postId) => {
-    if (!selectedWorkspace || !apiKey) {
-      alert('Please select a workspace and ensure API key is set');
+    if (!selectedWorkspace) {
+      alert('Please select a workspace in Settings');
       return;
     }
     try {
-      await fetch(`${API_BASE}/api/posts/${postId}/publish?workspace_id=${selectedWorkspace}&api_key=${apiKey}`, { 
-        method: 'POST' 
+      await fetch(`${API_BASE}/api/posts/${postId}/publish?workspace_id=${selectedWorkspace}&api_key=${localStorage.getItem('metricool_key') || ''}`, { 
+        method: 'POST',
+        headers: authHeader()
       });
       fetchPosts();
     } catch (e) {
@@ -129,18 +153,44 @@ function App() {
 
   const handleDelete = async (postId) => {
     try {
-      await fetch(`${API_BASE}/api/posts/${postId}`, { method: 'DELETE' });
+      await fetch(`${API_BASE}/api/posts/${postId}`, { method: 'DELETE', headers: authHeader() });
       fetchPosts();
     } catch (e) {
       console.error('Failed to delete:', e);
     }
   };
 
+  if (!isAuthenticated) {
+    return (
+      <div className="login-container">
+        <div className="login-box">
+          <h1>🔐 Social Media Dashboard</h1>
+          <form onSubmit={handleLogin}>
+            <input 
+              type="text" 
+              placeholder="Username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+            <input 
+              type="password" 
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <button type="submit">Login</button>
+          </form>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="app">
       <header className="header">
         <h1>🚀 Social Media Dashboard</h1>
         <p>Powered by Metricool</p>
+        <button className="logout-btn" onClick={() => setIsAuthenticated(false)}>Logout</button>
       </header>
 
       <nav className="nav">
@@ -172,7 +222,6 @@ function App() {
                 <p>Published</p>
               </div>
             </div>
-            
             <div className="quick-actions">
               <button onClick={() => setView('create')}>+ Create New Post</button>
             </div>
@@ -182,7 +231,6 @@ function App() {
         {view === 'create' && (
           <div className="create-post">
             <h2>✏️ Create New Post</h2>
-            
             <div className="form-group">
               <label>Post Content</label>
               <textarea 
@@ -192,7 +240,6 @@ function App() {
                 rows={5}
               />
             </div>
-
             <div className="form-group">
               <label>Hashtags (comma separated)</label>
               <input 
@@ -202,7 +249,6 @@ function App() {
                 placeholder="#social #marketing"
               />
             </div>
-
             <div className="form-group">
               <label>Media URLs (comma separated)</label>
               <input 
@@ -212,31 +258,6 @@ function App() {
                 placeholder="https://example.com/image.jpg"
               />
             </div>
-
-            <div className="form-group">
-              <label>Select Channels</label>
-              <div className="channels-grid">
-                {channels.length > 0 ? channels.map(ch => (
-                  <label key={ch.id} className="channel-checkbox">
-                    <input 
-                      type="checkbox"
-                      checked={newPost.channels.includes(ch.id)}
-                      onChange={(e) => {
-                        if (e.target.checked) {
-                          setNewPost({...newPost, channels: [...newPost.channels, ch.id]});
-                        } else {
-                          setNewPost({...newPost, channels: newPost.channels.filter(c => c !== ch.id)});
-                        }
-                      }}
-                    />
-                    {ch.network} - {ch.name}
-                  </label>
-                )) : (
-                  <p className="hint">Add API key in Settings and select workspace to see channels</p>
-                )}
-              </div>
-            </div>
-
             <button className="btn-primary" onClick={handleCreatePost}>Create Post</button>
           </div>
         )}
@@ -279,66 +300,17 @@ function App() {
         {view === 'settings' && (
           <div className="settings">
             <h2>⚙️ Settings</h2>
-            
             <div className="settings-section">
               <h3>🔑 API Keys</h3>
-              <p>Add your Metricool API key to connect your accounts.</p>
-              
               <div className="api-key-form">
-                <input 
-                  type="text" 
-                  placeholder="Name (e.g., Client Name)"
-                  id="keyName"
-                />
-                <input 
-                  type="password" 
-                  placeholder="Metricool API Key"
-                  id="keyValue"
-                />
+                <input type="text" placeholder="Name" id="keyName" />
+                <input type="password" placeholder="Metricool API Key" id="keyValue" />
                 <button onClick={() => {
                   const name = document.getElementById('keyName').value;
                   const key = document.getElementById('keyValue').value;
                   if (name && key) handleAddApiKey(name, key);
                 }}>Add Key</button>
               </div>
-
-              <div className="saved-keys">
-                <h4>Saved Keys:</h4>
-                {apiKeys.map((name, i) => (
-                  <span key={i} className="key-badge">{name}</span>
-                ))}
-              </div>
-            </div>
-
-            <div className="settings-section">
-              <h3>📂 Workspace</h3>
-              <p>Select which workspace to use:</p>
-              
-              <select 
-                value={apiKey} 
-                onChange={(e) => { setApiKey(e.target.value); setTimeout(fetchWorkspaces, 100); }}
-              >
-                <option value="">Select API Key</option>
-                {apiKeys.map((name, i) => (
-                  <option key={i} value={name}>{name}</option>
-                ))}
-              </select>
-
-              {apiKey && (
-                <button onClick={fetchWorkspaces}>Load Workspaces</button>
-              )}
-
-              {workspaces.length > 0 && (
-                <select 
-                  value={selectedWorkspace}
-                  onChange={(e) => { setSelectedWorkspace(e.target.value); fetchChannels(e.target.value); }}
-                >
-                  <option value="">Select Workspace</option>
-                  {workspaces.map(ws => (
-                    <option key={ws.id} value={ws.id}>{ws.name}</option>
-                  ))}
-                </select>
-              )}
             </div>
           </div>
         )}
