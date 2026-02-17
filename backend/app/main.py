@@ -2,7 +2,7 @@
 Social Media Dashboard API with JWT Authentication
 """
 
-from fastapi import FastAPI, HTTPException, Depends
+from fastapi import FastAPI, HTTPException, Depends, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from pydantic import BaseModel
@@ -15,6 +15,10 @@ import jwt
 from .metricool import MetricoolClient, get_client
 
 app = FastAPI(title="Social Media Dashboard API", version="3.0.0")
+
+# Create uploads directory
+UPLOAD_DIR = "/home/user/GitRepos/social-media-dashboard/backend/uploads"
+os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 # Security
 security = HTTPBearer(auto_error=False)
@@ -100,6 +104,40 @@ class APIKeyCreate(BaseModel):
 @app.get("/")
 def root():
     return {"message": "Social Media Dashboard API", "version": "3.0.0"}
+
+# ============ File Upload ============
+
+@app.post("/api/upload", tags=["files"])
+async def upload_file(file: UploadFile = File(...), username: str = Depends(verify_token)):
+    """Upload a media file"""
+    try:
+        # Generate unique filename
+        timestamp = datetime.now().timestamp()
+        ext = file.filename.split('.')[-1] if '.' in file.filename else 'jpg'
+        filename = f"{timestamp}_{file.filename}"
+        filepath = os.path.join(UPLOAD_DIR, filename)
+        
+        # Save file
+        content = await file.read()
+        with open(filepath, 'wb') as f:
+            f.write(content)
+        
+        # Return URL that can be used to access the file
+        file_url = f"http://100.101.67.20:8000/uploads/{filename}"
+        return {"url": file_url, "filename": filename}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/uploads/{filename}")
+async def get_uploaded_file(filename: str):
+    """Serve uploaded files"""
+    filepath = os.path.join(UPLOAD_DIR, filename)
+    if not os.path.exists(filepath):
+        raise HTTPException(status_code=404, detail="File not found")
+    
+    # Return file
+    from fastapi.responses import FileResponse
+    return FileResponse(filepath)
 
 # ============ Authentication ============
 

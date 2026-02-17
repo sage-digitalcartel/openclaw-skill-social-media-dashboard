@@ -189,10 +189,31 @@ function App() {
       return;
     }
     try {
+      let mediaUrls = newPost.mediaUrls ? newPost.mediaUrls.split(',').map(u => u.trim()) : [];
+      
+      // Upload any attached files first
+      if (newPost.mediaFiles && newPost.mediaFiles.length > 0) {
+        for (const file of newPost.mediaFiles) {
+          const formData = new FormData();
+          formData.append('file', file);
+          
+          const res = await fetch(`${API_BASE}/api/upload`, {
+            method: 'POST',
+            headers: { 'Authorization': 'Bearer ' + token },
+            body: formData
+          });
+          
+          if (res.ok) {
+            const data = await res.json();
+            mediaUrls.push(data.url);
+          }
+        }
+      }
+      
       const postData = {
         content: newPost.content,
         hashtags: newPost.hashtags ? newPost.hashtags.split(',').map(t => t.trim()) : [],
-        media_urls: newPost.mediaUrls ? newPost.mediaUrls.split(',').map(u => u.trim()) : [],
+        media_urls: mediaUrls,
         platforms: newPost.platforms,
         scheduled_time: null
       };
