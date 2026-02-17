@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './styles.css';
 
-const API_BASE = 'http://localhost:8000';
+const API_BASE = 'http://100.101.67.20:8000';
 
 function App() {
   const [view, setView] = useState('dashboard');
