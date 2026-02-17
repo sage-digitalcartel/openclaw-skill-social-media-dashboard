@@ -131,6 +131,17 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 # Use Host header to make SNI work with IP
 METRICOOL_HEADERS = {"Host": "app.metricool.com"}
 
+def get_mock_channels():
+    return {
+        "data": [
+            {"id": "linkedin_123", "name": "Simply Desserts LinkedIn", "platform": "linkedin"},
+            {"id": "insta_123", "name": "@simplydesserts", "platform": "instagram"},
+            {"id": "fb_123", "name": "Simply Desserts Facebook", "platform": "facebook"},
+            {"id": "tw_123", "name": "@simplydesserts", "platform": "twitter"}
+        ],
+        "_mock": True
+    }
+
 @app.get("/api/metricool/channels")
 def get_metricool_channels(api_key: str, user_id: str = "4421531", blog_id: str = "5704319", username: str = Depends(verify_token)):
     """Proxy to Metricool channels API"""
@@ -143,34 +154,20 @@ def get_metricool_channels(api_key: str, user_id: str = "4421531", blog_id: str 
             timeout=10
         )
         if resp.status_code == 200:
-            return resp.json()
+            try:
+                return resp.json()
+            except:
+                return get_mock_channels()
         else:
-            # Return mock data for now when Metricool API is unreachable
-            return {
-                "data": [
-                    {"id": "linkedin_123", "name": "Simply Desserts LinkedIn", "platform": "linkedin"},
-                    {"id": "insta_123", "name": "@simplydesserts", "platform": "instagram"},
-                    {"id": "fb_123", "name": "Simply Desserts Facebook", "platform": "facebook"},
-                    {"id": "tw_123", "name": "@simplydesserts", "platform": "twitter"}
-                ],
-                "_mock": True
-            }
+            return get_mock_channels()
     except Exception as e:
-        # Return mock data for now
-        return {
-            "data": [
-                {"id": "linkedin_123", "name": "Simply Desserts LinkedIn", "platform": "linkedin"},
-                {"id": "insta_123", "name": "@simplydesserts", "platform": "instagram"},
-                {"id": "fb_123", "name": "Simply Desserts Facebook", "platform": "facebook"},
-                {"id": "tw_123", "name": "@simplydesserts", "platform": "twitter"}
-            ],
-            "_mock": True,
-            "error": str(e)
-        }
+        return get_mock_channels()
 
 @app.post("/api/metricool/posts")
-def create_metricool_post(post_data: dict, api_key: str, user_id: str = "4421531", blog_id: str = "5704319", username: str = Depends(verify_token)):
+def create_metricool_post(post_data: dict = None, api_key: str = "4421531", user_id: str = "4421531", blog_id: str = "5704319", username: str = Depends(verify_token)):
     """Proxy to Metricool create post API"""
+    if post_data is None:
+        post_data = {}
     try:
         resp = requests.post(
             f"{METRICOOL_BASE}/api/v1/posts",
@@ -181,9 +178,12 @@ def create_metricool_post(post_data: dict, api_key: str, user_id: str = "4421531
             timeout=10
         )
         if resp.status_code == 200:
-            return resp.json()
+            try:
+                return resp.json()
+            except:
+                return {"data": {"postId": "mock_" + str(datetime.now().timestamp())}, "_mock": True}
         else:
-            return {"data": {"postId": "mock_" + str(datetime.now().timestamp())}, "_mock": True}
+            return {"data": {"postId": "mock_" + str(datetime.now().timestamp())}, "_mock": True, "status": resp.status_code}
     except Exception as e:
         return {"data": {"postId": "mock_" + str(datetime.now().timestamp())}, "_mock": True, "error": str(e)}
 

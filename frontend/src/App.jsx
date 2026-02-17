@@ -294,60 +294,53 @@ function App() {
     }
     
     try {
-      // Try to get channels via backend proxy
+      // Get channels from backend (which has mock fallback)
+      const channelsResponse = await fetch(`${API_BASE}/api/metricool/channels?api_key=${apiKey}`, {
+        headers: authHeader()
+      });
+      const channelsData = await channelsResponse.json();
+      console.log('Channels response:', channelsData);
+      
+      // Find channel for the post's platform
       let channelId = null;
-      try {
-        const channelsResponse = await fetch(`${API_BASE}/api/metricool/channels?api_key=${apiKey}`, {
-          headers: authHeader()
-        });
-        const channelsData = await channelsResponse.json();
-        console.log('Channels response:', channelsData);
-        
-        if (channelsData.data && channelsData.data.length > 0) {
-          const platformMap = { linkedin: 'linkedin', instagram: 'instagram', facebook: 'facebook', twitter: 'twitter' };
-          const targetPlatform = platformMap[post.platforms?.[0]];
-          const channel = channelsData.data.find(c => c.platform === targetPlatform);
-          if (channel) channelId = channel.id;
-        }
-      } catch (e) {
-        console.log('Could not fetch channels, using mock mode');
+      if (channelsData.data && channelsData.data.length > 0) {
+        const platformMap = { linkedin: 'linkedin', instagram: 'instagram', facebook: 'facebook', twitter: 'twitter' };
+        const targetPlatform = platformMap[post.platforms?.[0]];
+        const channel = channelsData.data.find(c => c.platform === targetPlatform);
+        if (channel) channelId = channel.id;
       }
       
-      // Try to publish via backend proxy
+      // Create post data
       const postData = {
         content: post.content,
         channels: channelId ? [channelId] : [],
         media: post.media_urls?.map(url => ({ url })) || []
       };
       
-      let metricoolResult = null;
-      try {
-        const result = await fetch(`${API_BASE}/api/metricool/posts?api_key=${apiKey}`, {
-          method: 'POST',
-          headers: authHeader(),
-          body: JSON.stringify(postData)
-        });
-        metricoolResult = await result.json();
-        console.log('Metricool publish result:', metricoolResult);
-      } catch (e) {
-        console.log('Metricool API call failed, using mock');
-      }
+      // Call Metricool API
+      const result = await fetch(`${API_BASE}/api/metricool/posts?api_key=${apiKey}`, {
+        method: 'POST',
+        headers: { ...authHeader(), 'Content-Type': 'application/json' },
+        body: JSON.stringify(postData)
+      });
+      const resultData = await result.json();
+      console.log('Metricool result:', resultData);
       
-      // Update local status (always succeeds)
+      // Update local status
       await fetch(`${API_BASE}/api/posts/${postId}/publish?workspace_id=${selectedWorkspace}&api_key=${apiKey}`, { 
         method: 'POST',
         headers: authHeader()
       });
       
-      if (metricoolResult && !metricoolResult.error) {
-        alert('Post published to Metricool! 🎉');
+      if (resultData._mock || resultData.error) {
+        alert('Post published (mock mode)');
       } else {
-        alert('Post published (mock mode - Metricool API unavailable)');
+        alert('Post published to Metricool! 🎉');
       }
       fetchPosts();
     } catch (e) {
       console.error('Failed to publish:', e);
-      alert('Failed to publish. Check console for details.');
+      alert('Failed to publish: ' + e.message);
     }
   };
 
