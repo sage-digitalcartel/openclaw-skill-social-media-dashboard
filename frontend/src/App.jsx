@@ -548,6 +548,23 @@ function App() {
                 }}>Refresh</button>
               </div>
 
+              <p className="hint" style={{marginTop: '1rem'}}>Or enter workspace ID manually:</p>
+              <div className="workspace-select">
+                <input 
+                  type="text" 
+                  placeholder="e.g. 5704319"
+                  value={selectedWorkspace}
+                  onChange={(e) => {
+                    setSelectedWorkspace(e.target.value);
+                    localStorage.setItem('metricool_workspace', e.target.value);
+                  }}
+                  style={{flex: 1}}
+                />
+                <button onClick={() => {
+                  if (selectedWorkspace) fetchChannels(selectedWorkspace);
+                }}>Load Channels</button>
+              </div>
+
               {channels.length > 0 && (
                 <div className="channels-list">
                   <h4>Available Channels:</h4>
