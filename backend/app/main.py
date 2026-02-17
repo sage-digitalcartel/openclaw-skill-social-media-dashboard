@@ -169,44 +169,58 @@ def create_metricool_post(post_data: dict = None, api_key: str = "4421531", user
     if post_data is None:
         post_data = {}
     
-    # Map our platform to Metricool network name
-    platform = post_data.get("platforms", ["linkedin"])[0] if post_data.get("platforms") else "linkedin"
+    # Get our post data
+    post_content = post_data.get("content", "")
+    platforms = post_data.get("platforms", ["linkedin"])
     
-    # Get post text
-    post_text = post_data.get("content", "")
+    # Build providers array from platforms
+    providers = []
+    linkedin_data = {}
+    twitter_data = {"type": "POST"}
+    instagram_data = {"autoPublish": True}
+    tiktok_data = {}
     
-    # Calculate times
-    from datetime import datetime, timedelta
-    now = datetime.now()
-    start_time = now.strftime("%Y-%m-%dT%H:%M:%S")
-    end_time = (now + timedelta(hours=2)).strftime("%Y-%m-%dT%H:%M:%S")
+    for p in platforms:
+        providers.append({
+            "network": p,
+            "status": "PENDING",
+            "detailedStatus": "Pending"
+        })
+        if p == "linkedin":
+            linkedin_data = {"previewIncluded": True, "type": "POST"}
+    
+    scheduler_data = {
+        "text": post_content,
+        "firstCommentText": "",
+        "providers": providers,
+        "autoPublish": True,
+        "saveExternalMediaFiles": False,
+        "shortener": False,
+        "draft": False,
+        "linkedinData": linkedin_data,
+        "twitterData": twitter_data,
+        "instagramData": instagram_data,
+        "tiktokData": tiktok_data,
+        "hasNotReadNotes": False
+    }
     
     try:
-        # Use GET with query params like the browser does
-        resp = requests.get(
+        resp = requests.post(
             f"{METRICOOL_BASE}/api/v2/scheduler/posts",
-            headers={**METRICOOL_HEADERS, "X-Mc-Auth": api_key},
-            params={
-                "start": start_time,
-                "end": end_time,
-                "timezone": "America/Maceio",
-                "extendedRange": "true",
-                "userId": user_id,
-                "blogId": blog_id
-            },
+            headers={**METRICOOL_HEADERS, "X-Mc-Auth": api_key, "Content-Type": "application/json"},
+            params={"userId": user_id, "blogId": blog_id},
+            json=scheduler_data,
             verify=False,
             timeout=10
         )
-        print(f"Metricool v2 response: {resp.status_code} - {resp.text[:300]}")
+        print(f"Metricool v2 create post response: {resp.status_code} - {resp.text[:300]}")
         
-        # If successful, try to actually create a post by using the post endpoint differently
         if resp.status_code == 200:
-            # Return the posts we got
             return resp.json()
         else:
-            return {"data": {"response": "scheduled_posts_retrieved"}, "_mock": False, "status": resp.status_code}
+            return {"_mock": False, "status": resp.status_code, "response": resp.text[:200]}
     except Exception as e:
-        return {"data": {"response": "error"}, "_mock": True, "error": str(e)}
+        return {"_mock": True, "error": str(e)}
 
 # ============ File Upload ============
 
