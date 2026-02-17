@@ -233,8 +233,8 @@ def publish_post(post_id: int, workspace_id: str, api_key: str, username: str = 
     if not post:
         raise HTTPException(status_code=404, detail="Post not found")
     
-    if post.status != "approved":
-        raise HTTPException(status_code=400, detail="Post must be approved first")
+    if post.status not in ["pending", "approved", "published"]:
+        raise HTTPException(status_code=400, detail="Post cannot be published")
     
     client = get_metricool_client(api_key)
     

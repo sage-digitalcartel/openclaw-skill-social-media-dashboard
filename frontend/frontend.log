@@ -11,9 +11,9 @@ Port 5173 is in use, trying another one...
   ➜  Network: http://100.101.67.20:51712:40:21 PM [vite] hmr update /src/App.jsx
 12:40:29 PM [vite] hmr update /src/App.jsx
 12:41:30 PM [vite] hmr update /src/App.jsx
-ss
-11:23:50 AM [vite] hmr update /src/App.jsx
-11:23:56 AM [vite] hmr update /src/styles.css
+12:42:50 PM [vite] hmr update /src/App.jsx
+12:42:59 PM [vite] hmr update /src/App.jsx
+s.css
 11:26:09 AM [vite] hmr update /src/App.jsx
 11:26:13 AM [vite] hmr update /src/App.jsx
 11:28:19 AM [vite] hmr update /src/App.jsx
@@ -94,3 +94,5 @@ ss
 12:40:21 PM [vite] hmr update /src/App.jsx
 12:40:29 PM [vite] hmr update /src/App.jsx
 12:41:30 PM [vite] hmr update /src/App.jsx
+12:42:50 PM [vite] hmr update /src/App.jsx
+12:42:59 PM [vite] hmr update /src/App.jsx

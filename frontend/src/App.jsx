@@ -272,7 +272,7 @@ function App() {
     }
   };
 
-  const handlePublish = async (postId) => {
+  const handlePublish = async (postId, force = false) => {
     const apiKey = localStorage.getItem('metricool_key');
     if (!apiKey) {
       alert('Please add your Metricool API key in Settings');
@@ -284,6 +284,13 @@ function App() {
     if (!post) {
       alert('Post not found');
       return;
+    }
+    
+    // Check if already published (unless forcing republish)
+    if (post.status === 'published' && !force) {
+      if (!confirm('This post is already published. Publish again?')) {
+        return;
+      }
     }
     
     try {
@@ -537,8 +544,8 @@ function App() {
                       {post.status === 'pending' && (
                         <button onClick={() => handleApprove(post.id)}>✅ Approve</button>
                       )}
-                      {post.status === 'approved' && (
-                        <button onClick={() => handlePublish(post.id)}>🚀 Publish</button>
+                      {(post.status === 'approved' || post.status === 'published') && (
+                        <button onClick={() => handlePublish(post.id)}>🚀 {post.status === 'published' ? 'Republish' : 'Publish'}</button>
                       )}
                       <button onClick={() => handleDelete(post.id)}>🗑️ Delete</button>
                     </div>
