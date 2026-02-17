@@ -165,27 +165,51 @@ def get_metricool_channels(api_key: str, user_id: str = "4421531", blog_id: str 
 
 @app.post("/api/metricool/posts")
 def create_metricool_post(post_data: dict = None, api_key: str = "4421531", user_id: str = "4421531", blog_id: str = "5704319", username: str = Depends(verify_token)):
-    """Proxy to Metricool create post API"""
+    """Proxy to Metricool create post API using v2 scheduler"""
     if post_data is None:
         post_data = {}
+    
+    # Transform to Metricool v2 scheduler format
+    networks = post_data.get("networks", [])
+    if not networks and post_data.get("channels"):
+        # Map channels to networks
+        channel = post_data["channels"][0]
+        if "linkedin" in channel.lower():
+            networks = ["linkedin"]
+        elif "instagram" in channel.lower():
+            networks = ["instagram"]
+        elif "facebook" in channel.lower():
+            networks = ["facebook"]
+        elif "twitter" in channel.lower() or "tw" in channel.lower():
+            networks = ["twitter"]
+    
+    scheduler_data = {
+        "networks": networks,
+        "text": post_data.get("content", ""),
+        "media": post_data.get("media", []),
+        "publicationDate": datetime.now().isoformat() + "Z",
+        "timezone": "UTC"
+    }
+    
     try:
         resp = requests.post(
-            f"{METRICOOL_BASE}/api/v1/posts",
-            headers={**METRICOOL_HEADERS, "X-Mc-Auth": api_key},
+            f"{METRICOOL_BASE}/api/v2/scheduler/posts",
+            headers={**METRICOOL_HEADERS, "X-Mc-Auth": api_key, "Content-Type": "application/json"},
             params={"userId": user_id, "blogId": blog_id},
-            json=post_data,
+            json=scheduler_data,
             verify=False,
             timeout=10
         )
+        print(f"Metricool v2 response: {resp.status_code} - {resp.text}")
         if resp.status_code == 200:
             try:
                 return resp.json()
             except:
-                return {"data": {"postId": "mock_" + str(datetime.now().timestamp())}, "_mock": True}
+                return {"data": {"postId": "v2_" + str(datetime.now().timestamp())}, "_mock": False}
         else:
-            return {"data": {"postId": "mock_" + str(datetime.now().timestamp())}, "_mock": True, "status": resp.status_code}
+            return {"data": {"postId": "v2_" + str(datetime.now().timestamp())}, "_mock": True, "status": resp.status_code, "response": resp.text[:200]}
     except Exception as e:
-        return {"data": {"postId": "mock_" + str(datetime.now().timestamp())}, "_mock": True, "error": str(e)}
+        return {"data": {"postId": "v2_" + str(datetime.now().timestamp())}, "_mock": True, "error": str(e)}
 
 # ============ File Upload ============
 
