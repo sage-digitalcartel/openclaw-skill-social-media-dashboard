@@ -181,13 +181,13 @@ def create_metricool_post(post_data: dict = None, api_key: str = "4421531", user
     tiktok_data = {}
     
     for p in platforms:
-        providers.append({
-            "network": p,
-            "status": "PENDING",
-            "detailedStatus": "Pending"
-        })
+        providers.append({"network": p})
         if p == "linkedin":
             linkedin_data = {"previewIncluded": True, "type": "POST"}
+    
+    # Get current time for publication date
+    now = datetime.now()
+    pub_date = now.strftime("%Y-%m-%dT%H:00:00")
     
     scheduler_data = {
         "text": post_content,
@@ -201,7 +201,8 @@ def create_metricool_post(post_data: dict = None, api_key: str = "4421531", user
         "twitterData": twitter_data,
         "instagramData": instagram_data,
         "tiktokData": tiktok_data,
-        "hasNotReadNotes": False
+        "hasNotReadNotes": False,
+        "publicationDate": {"dateTime": pub_date, "timezone": "America/Maceio"}
     }
     
     try:
@@ -213,7 +214,7 @@ def create_metricool_post(post_data: dict = None, api_key: str = "4421531", user
             verify=False,
             timeout=10
         )
-        print(f"Metricool v2 create post response: {resp.status_code} - {resp.text[:300]}")
+        print(f"Metricool create post response: {resp.status_code} - {resp.text[:200]}")
         
         if resp.status_code == 200:
             return resp.json()
