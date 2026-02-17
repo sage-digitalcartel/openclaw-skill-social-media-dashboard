@@ -90,15 +90,22 @@ function App() {
 
   const handleAddApiKey = async (name, key) => {
     try {
-      await fetch(`${API_BASE}/api/keys`, {
+      const res = await fetch(`${API_BASE}/api/keys`, {
         method: 'POST',
         headers: { ...authHeader(), 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, key })
       });
-      localStorage.setItem('metricool_key', key);
-      fetchApiKeys();
+      if (res.ok) {
+        localStorage.setItem('metricool_key', key);
+        fetchApiKeys();
+        alert('API Key saved successfully!');
+      } else {
+        const err = await res.text();
+        alert('Failed to save API key: ' + err);
+      }
     } catch (e) {
       console.error('Failed to add API key:', e);
+      alert('Failed to save API key. Check console for details.');
     }
   };
 
