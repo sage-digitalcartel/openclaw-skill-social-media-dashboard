@@ -113,17 +113,6 @@ for p in posts_list:
 POST_ID_COUNTER = max([p.id for p in posts_db], default=0) + 1
 
 # ============ Routes ============
-    platforms: List[str]
-    status: str
-    scheduled_time: Optional[str]
-    created_at: str
-    published_at: Optional[str] = None
-
-class APIKeyCreate(BaseModel):
-    name: str
-    key: str
-
-# ============ Routes ============
 
 @app.get("/")
 def root():
