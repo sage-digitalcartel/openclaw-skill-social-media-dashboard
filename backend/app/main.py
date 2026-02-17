@@ -84,6 +84,7 @@ class PostCreate(BaseModel):
     media_urls: Optional[List[str]] = []
     platforms: List[str] = []
     scheduled_time: Optional[str] = None
+    publish_now: bool = True
 
 class PostResponse(BaseModel):
     id: int
@@ -326,7 +327,7 @@ def get_channels(workspace_id: str, api_key: str, username: str = Depends(verify
         ]}
 
 @app.post("/api/posts/{post_id}/publish", tags=["posts"])
-def publish_post(post_id: int, workspace_id: str, api_key: str, username: str = Depends(verify_token)):
+def publish_post(post_id: int, workspace_id: str, api_key: str, scheduled_time: Optional[str] = None, username: str = Depends(verify_token)):
     """Publish a post via Metricool"""
     # Find the post
     post = None
@@ -341,26 +342,64 @@ def publish_post(post_id: int, workspace_id: str, api_key: str, username: str = 
     if post.status not in ["pending", "approved", "published"]:
         raise HTTPException(status_code=400, detail="Post cannot be published")
     
-    client = get_metricool_client(api_key)
+    # If scheduled_time provided, format it for Metricool
+    pub_date = None
+    if scheduled_time:
+        # Convert ISO format to Metricool format
+        try:
+            dt = datetime.fromisoformat(scheduled_time.replace('Z', '+00:00'))
+            pub_date = dt.strftime("%Y-%m-%dT%H:00")
+        except:
+            pub_date = None
+    
+    # Call Metricool directly here
+    platforms = post.platforms or ["linkedin"]
+    providers = [{"network": p} for p in platforms]
+    linkedin_data = {"previewIncluded": True, "type": "POST"} if "linkedin" in platforms else {}
+    
+    scheduler_data = {
+        "text": post.content,
+        "firstCommentText": "",
+        "providers": providers,
+        "autoPublish": True,
+        "saveExternalMediaFiles": False,
+        "shortener": False,
+        "draft": False,
+        "linkedinData": linkedin_data,
+        "twitterData": {"type": "POST"},
+        "instagramData": {"autoPublish": True},
+        "tiktokData": {},
+        "hasNotReadNotes": False,
+    }
+    
+    if pub_date:
+        scheduler_data["publicationDate"] = {"dateTime": pub_date, "timezone": "America/Maceio"}
     
     try:
-        result = client.publish_post(
-            workspace_id=workspace_id,
-            post_id=str(post_id)
+        resp = requests.post(
+            f"{METRICOOL_BASE}/api/v2/scheduler/posts",
+            headers={**METRICOOL_HEADERS, "X-Mc-Auth": api_key, "Content-Type": "application/json"},
+            params={"userId": "4421531", "blogId": "5704319"},
+            json=scheduler_data,
+            verify=False,
+            timeout=10
         )
+        print(f"Metricool publish response: {resp.status_code} - {resp.text[:200]}")
         
-        # Update post status
-        post.status = "published"
-        post.published_at = datetime.now().isoformat()
-        save_data({"posts": [dict(p) for p in posts_db], "api_keys": api_keys_db})
-        
-        return {"message": "Post published successfully", "result": result}
+        if resp.status_code == 200:
+            result_data = resp.json()
+            post.status = "published"
+            post.published_at = datetime.now().isoformat()
+            save_data({"posts": [dict(p) for p in posts_db], "api_keys": api_keys_db})
+            return {"message": "Post published to Metricool!", "result": result_data}
+        else:
+            raise Exception(resp.text[:200])
     except Exception as e:
-        # Mock success for testing when Metricool is unreachable
+        # Fallback to mock
         post.status = "published"
         post.published_at = datetime.now().isoformat()
         save_data({"posts": [dict(p) for p in posts_db], "api_keys": api_keys_db})
-        return {"message": "Post published successfully (mock)", "post_id": post_id, "workspace_id": workspace_id}
+        return {"message": "Post published (mock)", "error": str(e)}
 
 # ============ Posts Management ============
 

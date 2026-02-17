@@ -65,7 +65,9 @@ function App() {
     hashtags: '',
     mediaUrls: '',
     platforms: [],
-    mediaFiles: []
+    mediaFiles: [],
+    publishNow: true,
+    scheduleDate: ''
   });
 
   // Check for existing token on load
@@ -246,7 +248,8 @@ function App() {
         hashtags: newPost.hashtags ? newPost.hashtags.split(',').map(t => t.trim()) : [],
         media_urls: mediaUrls,
         platforms: newPost.platforms,
-        scheduled_time: null
+        scheduled_time: newPost.publishNow ? null : newPost.scheduleDate,
+        publish_now: newPost.publishNow
       };
       
       await fetch(`${API_BASE}/api/posts`, {
@@ -255,7 +258,7 @@ function App() {
         body: JSON.stringify(postData)
       });
       
-      setNewPost({ content: '', hashtags: '', mediaUrls: '', platforms: [], mediaFiles: [] });
+      setNewPost({ content: '', hashtags: '', mediaUrls: '', platforms: [], mediaFiles: [], publishNow: true, scheduleDate: '' });
       fetchPosts();
       setView('posts');
     } catch (e) {
@@ -509,7 +512,39 @@ function App() {
                 ))}
               </div>
             </div>
-            <button className="btn-primary" onClick={handleCreatePost}>Create Post</button>
+            <div className="form-group">
+              <label>When to Publish</label>
+              <div className="publish-options">
+                <label className="publish-option">
+                  <input 
+                    type="radio" 
+                    name="publishMode"
+                    checked={newPost.publishNow}
+                    onChange={() => setNewPost({...newPost, publishNow: true})}
+                  />
+                  🚀 Publish Now
+                </label>
+                <label className="publish-option">
+                  <input 
+                    type="radio" 
+                    name="publishMode"
+                    checked={!newPost.publishNow}
+                    onChange={() => setNewPost({...newPost, publishNow: false})}
+                  />
+                  📅 Schedule for Later
+                </label>
+              </div>
+              {!newPost.publishNow && (
+                <input 
+                  type="datetime-local"
+                  value={newPost.scheduleDate}
+                  onChange={(e) => setNewPost({...newPost, scheduleDate: e.target.value})}
+                  min={new Date().toISOString().slice(0, 16)}
+                  style={{marginTop: '0.5rem', padding: '0.75rem', borderRadius: '8px', border: '2px solid var(--border)'}}
+                />
+              )}
+            </div>
+            <button className="btn-primary" onClick={handleCreatePost}>{newPost.publishNow ? '🚀 Create & Publish' : '📅 Create & Schedule'}</button>
           </div>
         )}
 
