@@ -49,7 +49,8 @@ function App() {
     content: '',
     hashtags: '',
     mediaUrls: '',
-    platforms: []
+    platforms: [],
+    mediaFiles: []
   });
 
   // Check for existing token on load
@@ -202,7 +203,7 @@ function App() {
         body: JSON.stringify(postData)
       });
       
-      setNewPost({ content: '', hashtags: '', mediaUrls: '', platforms: [] });
+      setNewPost({ content: '', hashtags: '', mediaUrls: '', platforms: [], mediaFiles: [] });
       fetchPosts();
       setView('posts');
     } catch (e) {
@@ -350,20 +351,39 @@ function App() {
               />
             </div>
             <div className="form-group">
-              <label>Media URLs (comma separated)</label>
+              <label>Media</label>
+              <div className="media-upload">
+                <input 
+                  type="file" 
+                  id="mediaFile" 
+                  accept="image/*,video/*"
+                  multiple
+                  onChange={(e) => {
+                    const files = Array.from(e.target.files);
+                    setNewPost({...newPost, mediaFiles: files});
+                  }}
+                />
+                <label htmlFor="mediaFile" className="upload-btn">
+                  📎 Attach File
+                </label>
+                {newPost.mediaFiles.length > 0 && (
+                  <span className="file-count">{newPost.mediaFiles.length} file(s) selected</span>
+                )}
+              </div>
+              <p className="hint">Or paste URL below</p>
               <input 
                 type="text"
                 value={newPost.mediaUrls}
                 onChange={(e) => setNewPost({...newPost, mediaUrls: e.target.value})}
                 placeholder="https://example.com/image.jpg"
+                style={{marginTop: '0.5rem'}}
               />
-              <p className="hint">Paste image URLs from your media library</p>
             </div>
             <div className="form-group">
               <label>Platforms</label>
-              <div className="platforms-grid">
+              <div className="platforms-inline">
                 {Object.entries(PLATFORM_LOGOS).map(([platform, logo]) => (
-                  <label key={platform} className="platform-checkbox">
+                  <label key={platform} className="platform-checkbox-inline">
                     <input 
                       type="checkbox"
                       checked={newPost.platforms?.includes(platform)}
@@ -377,7 +397,6 @@ function App() {
                       }}
                     />
                     <span className="platform-icon">{logo}</span>
-                    <span className="platform-name">{platform}</span>
                   </label>
                 ))}
               </div>
