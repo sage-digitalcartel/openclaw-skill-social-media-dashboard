@@ -306,7 +306,109 @@ body {
 }
 
 .platform-icon {
-  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+}
+
+.platform-name {
+  text-transform: capitalize;
+  font-weight: 500;
+}
+
+/* Post Platform Tags */
+.post-platforms {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.platform-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: #f3f4f6;
+  color: #374151;
+  padding: 0.2rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  text-transform: capitalize;
+}
+
+.platform-tag svg {
+  width: 14px;
+  height: 14px;
+}
+
+.platform-label {
+  font-size: 0.75rem;
+}
+
+/* Post Media */
+.post-media {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+
+.post-media img {
+  max-width: 200px;
+  max-height: 200px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+/* Login Remember */
+.login-remember {
+  margin-top: 1rem;
+}
+
+.login-remember label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  color: var(--gray);
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.login-remember input {
+  width: auto;
+}
+
+/* Keys List */
+.keys-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.key-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  background: var(--light);
+  border-radius: 8px;
+}
+
+.key-name {
+  font-weight: 500;
+}
+
+.key-delete {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+
+.key-delete:hover {
+  opacity: 1;
 }
 
 .btn-primary {
