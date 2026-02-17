@@ -169,7 +169,7 @@ def create_metricool_post(post_data: dict = None, api_key: str = "4421531", user
     if post_data is None:
         post_data = {}
     
-    # Transform to Metricool v2 scheduler format - try different field names
+    # Transform to Metricool v2 scheduler format - publish immediately
     networks = post_data.get("networks", [])
     if not networks and post_data.get("channels"):
         channel = post_data["channels"][0]
@@ -184,11 +184,10 @@ def create_metricool_post(post_data: dict = None, api_key: str = "4421531", user
     
     scheduler_data = {
         "networkIds": networks,
-        "content": post_data.get("content", ""),
+        "content": {"text": post_data.get("content", "")},
         "media": post_data.get("media", []),
-        "scheduledTime": datetime.now().isoformat() + "Z",
-        "timezone": "UTC",
-        "postOnAllNetworks": False
+        "scheduledTime": "now",
+        "timezone": "America/Maceio"
     }
     
     try:
@@ -200,7 +199,7 @@ def create_metricool_post(post_data: dict = None, api_key: str = "4421531", user
             verify=False,
             timeout=10
         )
-        print(f"Metricool v2 response: {resp.status_code} - {resp.text}")
+        print(f"Metricool v2 response: {resp.status_code} - {resp.text[:200]}")
         if resp.status_code == 200:
             try:
                 return resp.json()
