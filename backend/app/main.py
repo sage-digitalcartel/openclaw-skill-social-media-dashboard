@@ -169,10 +169,9 @@ def create_metricool_post(post_data: dict = None, api_key: str = "4421531", user
     if post_data is None:
         post_data = {}
     
-    # Transform to Metricool v2 scheduler format
+    # Transform to Metricool v2 scheduler format - try different field names
     networks = post_data.get("networks", [])
     if not networks and post_data.get("channels"):
-        # Map channels to networks
         channel = post_data["channels"][0]
         if "linkedin" in channel.lower():
             networks = ["linkedin"]
@@ -184,11 +183,12 @@ def create_metricool_post(post_data: dict = None, api_key: str = "4421531", user
             networks = ["twitter"]
     
     scheduler_data = {
-        "networks": networks,
-        "text": post_data.get("content", ""),
+        "networkIds": networks,
+        "content": post_data.get("content", ""),
         "media": post_data.get("media", []),
-        "publicationDate": datetime.now().isoformat() + "Z",
-        "timezone": "UTC"
+        "scheduledTime": datetime.now().isoformat() + "Z",
+        "timezone": "UTC",
+        "postOnAllNetworks": False
     }
     
     try:
