@@ -21,6 +21,10 @@ app = FastAPI(title="Social Media Dashboard API", version="3.0.0")
 UPLOAD_DIR = "/home/user/GitRepos/social-media-dashboard/backend/uploads"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
+# Metricool API via IP (bypass DNS)
+METRICOOL_HOST = "63.32.244.140"
+METRICOOL_BASE = f"https://{METRICOOL_HOST}"
+
 # Security
 security = HTTPBearer(auto_error=False)
 
@@ -117,6 +121,41 @@ POST_ID_COUNTER = max([p.id for p in posts_db], default=0) + 1
 @app.get("/")
 def root():
     return {"message": "Social Media Dashboard API", "version": "3.0.0"}
+
+# ============ Metricool Proxy (bypass DNS) ============
+
+import requests
+import urllib3
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
+@app.get("/api/metricool/channels")
+def get_metricool_channels(api_key: str, user_id: str = "4421531", blog_id: str = "5704319", username: str = Depends(verify_token)):
+    """Proxy to Metricool channels API"""
+    try:
+        resp = requests.get(
+            f"{METRICOOL_BASE}/api/v1/channels",
+            headers={"X-Mc-Auth": api_key},
+            params={"userId": user_id, "blogId": blog_id},
+            verify=False
+        )
+        return resp.json()
+    except Exception as e:
+        return {"error": str(e)}
+
+@app.post("/api/metricool/posts")
+def create_metricool_post(post_data: dict, api_key: str, user_id: str = "4421531", blog_id: str = "5704319", username: str = Depends(verify_token)):
+    """Proxy to Metricool create post API"""
+    try:
+        resp = requests.post(
+            f"{METRICOOL_BASE}/api/v1/posts",
+            headers={"X-Mc-Auth": api_key},
+            params={"userId": user_id, "blogId": blog_id},
+            json=post_data,
+            verify=False
+        )
+        return resp.json()
+    except Exception as e:
+        return {"error": str(e)}
 
 # ============ File Upload ============
 
