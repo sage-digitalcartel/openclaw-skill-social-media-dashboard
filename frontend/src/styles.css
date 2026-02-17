@@ -488,6 +488,52 @@ body {
   opacity: 1;
 }
 
+/* Workspace Select */
+.workspace-select {
+  display: flex;
+  gap: 0.75rem;
+  margin: 1rem 0;
+}
+
+.workspace-select select {
+  flex: 1;
+  padding: 0.75rem;
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  font-size: 1rem;
+  background: white;
+}
+
+.workspace-select button {
+  padding: 0.75rem 1.25rem;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.channels-list {
+  margin-top: 1rem;
+}
+
+.channel-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0.75rem;
+  background: var(--light);
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+}
+
+.channel-platform {
+  font-size: 0.8rem;
+  color: var(--gray);
+  text-transform: capitalize;
+}
+
 .btn-primary {
   background: var(--primary);
   color: var(--white);

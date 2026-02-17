@@ -59,6 +59,12 @@ function App() {
       setIsAuthenticated(true);
       fetchPosts();
       fetchApiKeys();
+      // Load saved workspace
+      const savedWorkspace = localStorage.getItem('metricool_workspace');
+      if (savedWorkspace) {
+        setSelectedWorkspace(savedWorkspace);
+        fetchChannels(savedWorkspace);
+      }
     }
   }, []);
 
@@ -88,10 +94,18 @@ function App() {
 
   const fetchWorkspaces = async () => {
     if (!token) return;
+    const apiKey = localStorage.getItem('metricool_key');
+    if (!apiKey) {
+      alert('Please add your Metricool API key first');
+      return;
+    }
     try {
-      const res = await fetch(`${API_BASE}/api/workspaces?api_key=${localStorage.getItem('metricool_key') || ''}`, { headers: authHeader() });
+      const res = await fetch(`${API_BASE}/api/workspaces?api_key=${apiKey}`, { headers: authHeader() });
       const data = await res.json();
       setWorkspaces(data.workspaces || []);
+      if (data.workspaces?.length === 0) {
+        alert('No workspaces found. Check your API key.');
+      }
     } catch (e) {
       console.error('Failed to fetch workspaces:', e);
     }
@@ -99,8 +113,10 @@ function App() {
 
   const fetchChannels = async (workspaceId) => {
     if (!token || !workspaceId) return;
+    const apiKey = localStorage.getItem('metricool_key');
+    if (!apiKey) return;
     try {
-      const res = await fetch(`${API_BASE}/api/workspaces/${workspaceId}/channels?api_key=${localStorage.getItem('metricool_key') || ''}`, { headers: authHeader() });
+      const res = await fetch(`${API_BASE}/api/workspaces/${workspaceId}/channels?api_key=${apiKey}`, { headers: authHeader() });
       const data = await res.json();
       setChannels(data.channels || []);
     } catch (e) {
@@ -504,6 +520,43 @@ function App() {
                       </div>
                     ))}
                   </div>
+                </div>
+              )}
+            </div>
+
+            <div className="settings-section">
+              <h3>📁 Workspace & Channels</h3>
+              <p className="hint">Select your Metricool workspace for publishing</p>
+              
+              <div className="workspace-select">
+                <select 
+                  value={selectedWorkspace} 
+                  onChange={(e) => {
+                    setSelectedWorkspace(e.target.value);
+                    localStorage.setItem('metricool_workspace', e.target.value);
+                    if (e.target.value) fetchChannels(e.target.value);
+                  }}
+                >
+                  <option value="">Select a workspace...</option>
+                  {workspaces.map(ws => (
+                    <option key={ws.id} value={ws.id}>{ws.name}</option>
+                  ))}
+                </select>
+                <button onClick={() => {
+                  const apiKey = localStorage.getItem('metricool_key');
+                  if (apiKey) fetchWorkspaces();
+                }}>Refresh</button>
+              </div>
+
+              {channels.length > 0 && (
+                <div className="channels-list">
+                  <h4>Available Channels:</h4>
+                  {channels.map(ch => (
+                    <div key={ch.id} className="channel-item">
+                      <span>{ch.name}</span>
+                      <span className="channel-platform">{ch.platform}</span>
+                    </div>
+                  ))}
                 </div>
               )}
             </div>
