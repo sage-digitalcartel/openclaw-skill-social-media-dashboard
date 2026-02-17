@@ -64,22 +64,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Load data from file
-data = load_data()
-posts_list = data.get("posts", [])
-api_keys_db = data.get("api_keys", {})
-
-# Convert dicts to PostResponse objects
-posts_db = []
-for p in posts_list:
-    if isinstance(p, dict):
-        posts_db.append(PostResponse(**p))
-    else:
-        posts_db.append(p)
-
-# Post ID counter
-POST_ID_COUNTER = max([p.id for p in posts_db], default=0) + 1
-
 # ============ Pydantic Models ============
 
 class LoginRequest(BaseModel):
@@ -102,6 +86,33 @@ class PostResponse(BaseModel):
     content: str
     hashtags: List[str]
     media_urls: List[str]
+    platforms: List[str]
+    status: str
+    scheduled_time: Optional[str]
+    created_at: str
+    published_at: Optional[str] = None
+
+class APIKeyCreate(BaseModel):
+    name: str
+    key: str
+
+# Load data from file (after PostResponse is defined)
+data = load_data()
+posts_list = data.get("posts", [])
+api_keys_db = data.get("api_keys", {})
+
+# Convert dicts to PostResponse objects
+posts_db = []
+for p in posts_list:
+    if isinstance(p, dict):
+        posts_db.append(PostResponse(**p))
+    else:
+        posts_db.append(p)
+
+# Post ID counter
+POST_ID_COUNTER = max([p.id for p in posts_db], default=0) + 1
+
+# ============ Routes ============
     platforms: List[str]
     status: str
     scheduled_time: Optional[str]
