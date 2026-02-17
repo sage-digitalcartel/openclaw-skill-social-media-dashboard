@@ -13,6 +13,7 @@ import secrets
 import jwt
 
 from .metricool import MetricoolClient, get_client
+from .storage import load_data, save_data
 
 app = FastAPI(title="Social Media Dashboard API", version="3.0.0")
 
@@ -63,9 +64,21 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# In-memory storage
+# Load data from file
+data = load_data()
+posts_list = data.get("posts", [])
+api_keys_db = data.get("api_keys", {})
+
+# Convert dicts to PostResponse objects
 posts_db = []
-api_keys_db = {}
+for p in posts_list:
+    if isinstance(p, dict):
+        posts_db.append(PostResponse(**p))
+    else:
+        posts_db.append(p)
+
+# Post ID counter
+POST_ID_COUNTER = max([p.id for p in posts_db], default=0) + 1
 
 # ============ Pydantic Models ============
 
@@ -157,6 +170,7 @@ def login(credentials: LoginRequest):
 def save_api_key(key_data: APIKeyCreate, username: str = Depends(verify_token)):
     """Save a Metricool API key"""
     api_keys_db[key_data.name] = key_data.key
+    save_data({"posts": posts_db, "api_keys": api_keys_db})
     return {"message": "API key saved", "name": key_data.name}
 
 @app.get("/api/keys", tags=["keys"])
@@ -169,6 +183,7 @@ def delete_key(name: str, username: str = Depends(verify_token)):
     """Delete an API key"""
     if name in api_keys_db:
         del api_keys_db[name]
+        save_data({"posts": posts_db, "api_keys": api_keys_db})
         return {"message": "Key deleted"}
     raise HTTPException(status_code=404, detail="Key not found")
 
@@ -229,6 +244,7 @@ def publish_post(post_id: int, workspace_id: str, api_key: str, username: str = 
         # Update post status
         post.status = "published"
         post.published_at = datetime.now().isoformat()
+        save_data({"posts": [dict(p) for p in posts_db], "api_keys": api_keys_db})
         
         return {"message": "Post published successfully", "result": result}
     except Exception as e:
@@ -239,7 +255,9 @@ def publish_post(post_id: int, workspace_id: str, api_key: str, username: str = 
 @app.post("/api/posts", response_model=PostResponse, tags=["posts"])
 def create_post(post: PostCreate, api_key: str = None, username: str = Depends(verify_token)):
     """Create a new post"""
-    post_id = len(posts_db) + 1
+    global POST_ID_COUNTER
+    post_id = POST_ID_COUNTER
+    POST_ID_COUNTER += 1
     new_post = PostResponse(
         id=post_id,
         content=post.content,
@@ -251,6 +269,7 @@ def create_post(post: PostCreate, api_key: str = None, username: str = Depends(v
         created_at=datetime.now().isoformat()
     )
     posts_db.append(new_post)
+    save_data({"posts": [dict(p) for p in posts_db], "api_keys": api_keys_db})
     return new_post
 
 @app.get("/api/posts", tags=["posts"])
@@ -276,6 +295,7 @@ def approve_post(post_id: int, username: str = Depends(verify_token)):
             if post.status != "pending":
                 raise HTTPException(status_code=400, detail="Post is not pending")
             post.status = "approved"
+            save_data({"posts": [dict(p) for p in posts_db], "api_keys": api_keys_db})
             return {"message": "Post approved", "post": post}
     raise HTTPException(status_code=404, detail="Post not found")
 
@@ -286,5 +306,6 @@ def delete_post(post_id: int, username: str = Depends(verify_token)):
     for i, post in enumerate(posts_db):
         if post.id == post_id:
             posts_db.pop(i)
+            save_data({"posts": [dict(p) for p in posts_db], "api_keys": api_keys_db})
             return {"message": "Post deleted"}
     raise HTTPException(status_code=404, detail="Post not found")
