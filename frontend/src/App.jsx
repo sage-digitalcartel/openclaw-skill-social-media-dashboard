@@ -17,7 +17,7 @@ function App() {
     content: '',
     hashtags: '',
     mediaUrls: '',
-    channels: []
+    platforms: []
   });
 
   const authHeader = () => ({
@@ -110,12 +110,20 @@ function App() {
   };
 
   const handleCreatePost = async () => {
+    if (!newPost.content) {
+      alert('Please enter post content');
+      return;
+    }
+    if (!newPost.platforms || newPost.platforms.length === 0) {
+      alert('Please select at least one platform');
+      return;
+    }
     try {
       const postData = {
         content: newPost.content,
         hashtags: newPost.hashtags ? newPost.hashtags.split(',').map(t => t.trim()) : [],
         media_urls: newPost.mediaUrls ? newPost.mediaUrls.split(',').map(u => u.trim()) : [],
-        channels: newPost.channels,
+        platforms: newPost.platforms,
         scheduled_time: null
       };
       
@@ -125,7 +133,7 @@ function App() {
         body: JSON.stringify(postData)
       });
       
-      setNewPost({ content: '', hashtags: '', mediaUrls: '', channels: [] });
+      setNewPost({ content: '', hashtags: '', mediaUrls: '', platforms: [] });
       fetchPosts();
       setView('posts');
     } catch (e) {
@@ -269,6 +277,71 @@ function App() {
                 placeholder="https://example.com/image.jpg"
               />
             </div>
+            <div className="form-group">
+              <label>Platforms</label>
+              <div className="platforms-grid">
+                <label className="platform-checkbox">
+                  <input 
+                    type="checkbox"
+                    checked={newPost.platforms?.includes('linkedin')}
+                    onChange={(e) => {
+                      const platforms = newPost.platforms || [];
+                      if (e.target.checked) {
+                        setNewPost({...newPost, platforms: [...platforms, 'linkedin']});
+                      } else {
+                        setNewPost({...newPost, platforms: platforms.filter(p => p !== 'linkedin')});
+                      }
+                    }}
+                  />
+                  <span className="platform-icon">💼</span> LinkedIn
+                </label>
+                <label className="platform-checkbox">
+                  <input 
+                    type="checkbox"
+                    checked={newPost.platforms?.includes('instagram')}
+                    onChange={(e) => {
+                      const platforms = newPost.platforms || [];
+                      if (e.target.checked) {
+                        setNewPost({...newPost, platforms: [...platforms, 'instagram']});
+                      } else {
+                        setNewPost({...newPost, platforms: platforms.filter(p => p !== 'instagram')});
+                      }
+                    }}
+                  />
+                  <span className="platform-icon">📸</span> Instagram
+                </label>
+                <label className="platform-checkbox">
+                  <input 
+                    type="checkbox"
+                    checked={newPost.platforms?.includes('twitter')}
+                    onChange={(e) => {
+                      const platforms = newPost.platforms || [];
+                      if (e.target.checked) {
+                        setNewPost({...newPost, platforms: [...platforms, 'twitter']});
+                      } else {
+                        setNewPost({...newPost, platforms: platforms.filter(p => p !== 'twitter')});
+                      }
+                    }}
+                  />
+                  <span className="platform-icon">🐦</span> Twitter
+                </label>
+                <label className="platform-checkbox">
+                  <input 
+                    type="checkbox"
+                    checked={newPost.platforms?.includes('facebook')}
+                    onChange={(e) => {
+                      const platforms = newPost.platforms || [];
+                      if (e.target.checked) {
+                        setNewPost({...newPost, platforms: [...platforms, 'facebook']});
+                      } else {
+                        setNewPost({...newPost, platforms: platforms.filter(p => p !== 'facebook')});
+                      }
+                    }}
+                  />
+                  <span className="platform-icon">📘</span> Facebook
+                </label>
+              </div>
+            </div>
             <button className="btn-primary" onClick={handleCreatePost}>Create Post</button>
           </div>
         )}
@@ -284,6 +357,13 @@ function App() {
                   <div key={post.id} className={`post-card ${post.status}`}>
                     <div className="post-header">
                       <span className={`status ${post.status}`}>{post.status}</span>
+                      {post.platforms && (
+                        <div className="post-platforms">
+                          {post.platforms.map((p, i) => (
+                            <span key={i} className="platform-tag">{p}</span>
+                          ))}
+                        </div>
+                      )}
                       <span className="date">{new Date(post.created_at).toLocaleDateString()}</span>
                     </div>
                     <p className="post-content">{post.content}</p>

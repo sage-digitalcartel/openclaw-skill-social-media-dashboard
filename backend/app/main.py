@@ -54,7 +54,7 @@ class PostCreate(BaseModel):
     content: str
     hashtags: Optional[List[str]] = []
     media_urls: Optional[List[str]] = []
-    channels: List[str] = []
+    platforms: List[str] = []
     scheduled_time: Optional[str] = None
 
 class PostResponse(BaseModel):
@@ -62,7 +62,7 @@ class PostResponse(BaseModel):
     content: str
     hashtags: List[str]
     media_urls: List[str]
-    channels: List[str]
+    platforms: List[str]
     status: str
     scheduled_time: Optional[str]
     created_at: str
@@ -137,7 +137,7 @@ def create_post(post: PostCreate, api_key: str = None, username: str = Depends(v
         content=post.content,
         hashtags=post.hashtags or [],
         media_urls=post.media_urls or [],
-        channels=post.channels or [],
+        platforms=post.platforms or [],
         status="pending",
         scheduled_time=post.scheduled_time,
         created_at=datetime.now().isoformat()

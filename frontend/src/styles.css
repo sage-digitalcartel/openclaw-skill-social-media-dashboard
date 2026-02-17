@@ -271,6 +271,44 @@ body {
   min-height: 120px;
 }
 
+/* Platform Checkboxes */
+.platforms-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.platform-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: var(--light);
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.platform-checkbox:hover {
+  border-color: var(--primary);
+}
+
+.platform-checkbox input {
+  width: auto;
+  margin: 0;
+}
+
+.platform-checkbox:has(input:checked) {
+  background: rgba(212, 163, 115, 0.15);
+  border-color: var(--primary);
+}
+
+.platform-icon {
+  font-size: 1.2rem;
+}
+
 .btn-primary {
   background: var(--primary);
   color: var(--white);
@@ -345,6 +383,23 @@ body {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.post-platforms {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.platform-tag {
+  background: #e0e7ff;
+  color: #3730a3;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  text-transform: capitalize;
 }
 
 .status {
