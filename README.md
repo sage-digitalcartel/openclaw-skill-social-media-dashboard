@@ -1,52 +1,83 @@
-# Social Media Post Management Dashboard
+# 🚀 Social Media Dashboard
 
-Client-facing dashboard for managing Social Media posts with previews, approvals, and publish toggles. Built with FastAPI (backend) and React (frontend). Integration queues validated post configs for the OpenClaw Social Media auto-poster skill.
+A modern, full-featured social media management dashboard powered by Metricool API. Manage all your social media accounts from one place!
 
-## Structure
+## ✨ Features
 
-```
-social-dashboard/
-  backend/
-    app/
-      main.py
-      models.py
-      schemas.py
-      database.py
-      social.py
-    outbox/
-    requirements.txt
-  frontend/
-```
+- **Multi-Platform Support** - LinkedIn, Instagram, Twitter, Facebook via Metricool
+- **Post Creation** - Create posts with text, hashtags, and media
+- **Approval Workflow** - Review and approve posts before publishing
+- **Scheduling** - Schedule posts for later publishing
+- **Metricool Integration** - Direct API integration for instant publishing
+- **Beautiful UI** - Modern, responsive React interface
 
-## Backend Setup
+## 🛠️ Setup
+
+### Backend (FastAPI)
 
 ```bash
-cd /home/user/GitRepos/social-dashboard/backend
-python3 -m venv .venv
-source .venv/bin/activate
+cd backend
 pip install -r requirements.txt
-uvicorn app.main:app --reload --port 8000
+uvicorn app.main:app --host 0.0.0.0 --port 8000
 ```
+
+### Frontend (React + Vite)
+
+```bash
+cd frontend
+npm install
+npm run dev -- --host
+```
+
+## 🔧 Configuration
 
 ### Environment Variables
 
-- `LINKEDIN_SKILL_PATH` (default: `/home/user/GitRepos/openclaw-skill-social-auto-poster`)
-- `LINKEDIN_OUTBOX` (default: `/home/user/GitRepos/social-dashboard/backend/outbox`)
+Create a `.env` file in the backend:
 
-When publishing, the API validates the post config using the OpenClaw skill `validate_config.py` and writes a JSON file to the outbox for automation.
-
-## Frontend Setup
-
-```bash
-cd /home/user/GitRepos/social-dashboard/frontend
-npm install
-npm run dev
+```env
+METRICOOL_API_KEY=your_api_key_here
 ```
 
-Configure the API base URL via `VITE_API_URL` if needed (defaults to `http://localhost:8000`).
+### Getting Your Metricool API Key
 
-## Notes
+1. Log in to your Metricool account
+2. Go to Settings → Integrations → API
+3. Generate an API key
 
-- Posts must be approved before publishing.
-- `POST /api/posts/{id}/publish` will queue the post (dry run optional).
-- Use the OpenClaw Social Media skill to process outbox configs and publish in the browser relay.
+## 📡 API Endpoints
+
+### Posts
+- `POST /api/posts` - Create a new post
+- `GET /api/posts` - List all posts
+- `GET /api/posts/{id}` - Get post details
+- `PATCH /api/posts/{id}/approve` - Approve a post
+- `PATCH /api/posts/{id}/reject` - Reject a post
+- `POST /api/posts/{id}/publish` - Publish via Metricool
+- `DELETE /api/posts/{id}` - Delete a post
+
+### Metricool Integration
+- `GET /api/workspaces` - List workspaces
+- `GET /api/workspaces/{id}/channels` - List channels in workspace
+
+### API Keys
+- `POST /api/keys` - Save API key
+- `GET /api/keys` - List saved keys
+- `DELETE /api/keys/{name}` - Delete API key
+
+## 📱 Usage
+
+1. Start the backend server
+2. Start the frontend dev server
+3. Open browser to frontend URL
+4. Go to Settings → Add your Metricool API key
+5. Select your workspace
+6. Create posts, approve, and publish!
+
+## 🌐 Deployment
+
+Deploy on any VPS with Node.js and Python. Access via browser - clients can use from anywhere!
+
+## 📄 License
+
+Private - All rights reserved
