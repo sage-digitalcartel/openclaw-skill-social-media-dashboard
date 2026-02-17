@@ -167,8 +167,7 @@ function App() {
           <div className="login-logo">
             <img src="https://simplydesserts.us/wp-content/uploads/2024/09/logo.png" alt="Simply Desserts" style={{maxWidth: '200px'}} />
           </div>
-          <h1>Simply Desserts</h1>
-          <p className="subtitle">Social Media Dashboard</p>
+          <h1><strong>Social Media Dashboard</strong></h1>
           <form onSubmit={handleLogin}>
             <input 
               type="text" 
