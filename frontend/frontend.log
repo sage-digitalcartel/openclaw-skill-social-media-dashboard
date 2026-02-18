@@ -42,14 +42,14 @@ Port 5173 is in use, trying another one...
 11:26:14 AM [vite] hmr update /src/App.jsx
 11:26:37 AM [vite] hmr update /src/App.jsx
 11:26:51 AM [vite] hmr update /src/App.jsx
-ontend/src/styles.css:85:2
-  83 |    padding: 1rem;
-  84 |    border: 2px solid var(--border);
-  85 |    border-radius;
-     |    ^
-  86 |    font-size: 12px: 1rem;
-  87 |    transition: all 0.2s;
-      at Input.error (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/postcss/lib/input.js:135:16)
+11:30:39 AM [vite] hmr update /src/styles.css
+11:31:19 AM [vite] hmr update /src/App.jsx
+11:31:41 AM [vite] hmr update /src/App.jsx
+11:31:57 AM [vite] hmr update /src/App.jsx
+11:32:22 AM [vite] hmr update /src/App.jsx
+11:32:31 AM [vite] hmr update /src/App.jsx
+11:32:59 AM [vite] hmr update /src/App.jsx
+:135:16)
       at Parser.unknownWord (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/postcss/lib/parser.js:595:22)
       at Parser.other (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/postcss/lib/parser.js:437:12)
       at Parser.parse (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/postcss/lib/parser.js:472:16)
@@ -127,3 +127,10 @@ ontend/src/styles.css:85:2
 11:26:14 AM [vite] hmr update /src/App.jsx
 11:26:37 AM [vite] hmr update /src/App.jsx
 11:26:51 AM [vite] hmr update /src/App.jsx
+11:30:39 AM [vite] hmr update /src/styles.css
+11:31:19 AM [vite] hmr update /src/App.jsx
+11:31:41 AM [vite] hmr update /src/App.jsx
+11:31:57 AM [vite] hmr update /src/App.jsx
+11:32:22 AM [vite] hmr update /src/App.jsx
+11:32:31 AM [vite] hmr update /src/App.jsx
+11:32:59 AM [vite] hmr update /src/App.jsx

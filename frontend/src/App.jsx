@@ -53,9 +53,9 @@ function App() {
   const [view, setView] = useState('dashboard');
   const [posts, setPosts] = useState([]);
   const [apiKeys, setApiKeys] = useState([]);
-  const [workspaces, setWorkspaces] = useState([]);
   const [channels, setChannels] = useState([]);
-  const [selectedWorkspace, setSelectedWorkspace] = useState('');
+  const [userId, setUserId] = useState(localStorage.getItem('metricool_userId') || '4421531');
+  const [blogId, setBlogId] = useState(localStorage.getItem('metricool_blogId') || '5704319');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -98,17 +98,10 @@ function App() {
       fetchPosts();
       fetchApiKeys();
       
-      // Auto-fetch workspaces if Metricool key saved
+      // Auto-fetch channels if Metricool key saved
       const savedMetricoolKey = localStorage.getItem('metricool_key');
       if (savedMetricoolKey) {
-        fetchWorkspaces();
-      }
-      
-      // Load saved workspace
-      const savedWorkspace = localStorage.getItem('metricool_workspace');
-      if (savedWorkspace) {
-        setSelectedWorkspace(savedWorkspace);
-        fetchChannels(savedWorkspace);
+        fetchChannels();
       }
     }
   }, []);
@@ -137,7 +130,7 @@ function App() {
     }
   };
 
-  const fetchWorkspaces = async () => {
+  const fetchChannels = async () => {
     if (!token) return;
     const apiKey = localStorage.getItem('metricool_key');
     if (!apiKey) {
@@ -145,27 +138,18 @@ function App() {
       return;
     }
     try {
-      const res = await fetch(`${API_BASE}/api/workspaces?api_key=${apiKey}`, { headers: authHeader() });
+      // Use userId/blogId directly to get channels
+      const res = await fetch(`${API_BASE}/api/metricool/channels?api_key=${apiKey}&user_id=${userId}&blog_id=${blogId}`, { headers: authHeader() });
       const data = await res.json();
-      setWorkspaces(data.workspaces || []);
-      if (data.workspaces?.length === 0) {
-        showNotification('No workspaces found. Check your API key.', 'error');
+      setChannels(data.data || []);
+      if (data.data?.length === 0) {
+        showNotification('No channels found. Check your userId/blogId.', 'error');
+      } else if (data._mock) {
+        showNotification('Using mock channels (API unreachable)', 'error');
       }
     } catch (e) {
-      console.error('Failed to fetch workspaces:', e);
-    }
-  };
-
-  const fetchChannels = async (workspaceId) => {
-    if (!token || !workspaceId) return;
-    const apiKey = localStorage.getItem('metricool_key');
-    if (!apiKey) return;
-    try {
-      const res = await fetch(`${API_BASE}/api/workspaces/${workspaceId}/channels?api_key=${apiKey}`, { headers: authHeader() });
-      const data = await res.json();
-      setChannels(data.channels || []);
-    } catch (e) {
       console.error('Failed to fetch channels:', e);
+      showNotification('Failed to fetch channels', 'error');
     }
   };
 
@@ -325,9 +309,9 @@ function App() {
         fetchApiKeys();
         showNotification('API Key saved successfully!');
         
-        // Auto-fetch workspaces for Metricool
+        // Auto-fetch channels for Metricool
         if (name === 'metricool') {
-          fetchWorkspaces();
+          fetchChannels();
         }
       } else {
         showNotification('Failed to save API key', 'error');
@@ -469,7 +453,7 @@ function App() {
       console.log('Metricool result:', resultData);
       
       // Update local status
-      await fetch(`${API_BASE}/api/posts/${postId}/publish?workspace_id=${selectedWorkspace}&api_key=${apiKey}`, { 
+      await fetch(`${API_BASE}/api/posts/${postId}/publish?user_id=${userId}&blog_id=${blogId}&api_key=${apiKey}`, { 
         method: 'POST',
         headers: authHeader()
       });
@@ -817,30 +801,41 @@ function App() {
             </div>
 
             <div className="settings-section">
-              <h3>📁 Workspace & Channels</h3>
-              <p className="hint">Select your Metricool workspace for publishing</p>
+              <h3>📊 Metricool Channels</h3>
+              <p className="hint">Your connected social media channels</p>
               
-              <div className="workspace-select">
-                <select 
-                  value={selectedWorkspace} 
-                  onChange={(e) => {
-                    setSelectedWorkspace(e.target.value);
-                    localStorage.setItem('metricool_workspace', e.target.value);
-                    if (e.target.value) fetchChannels(e.target.value);
-                  }}
-                >
-                  <option value="">Select a workspace...</option>
-                  {workspaces.map(ws => (
-                    <option key={ws.id} value={ws.id}>{ws.name}</option>
-                  ))}
-                </select>
-                <button onClick={() => {
-                  const apiKey = localStorage.getItem('metricool_key');
-                  if (apiKey) fetchWorkspaces();
-                }}>Refresh</button>
+              <div className="form-row" style={{marginBottom: '1rem'}}>
+                <div className="form-group" style={{flex: 1}}>
+                  <label>User ID</label>
+                  <input 
+                    type="text" 
+                    value={userId}
+                    onChange={(e) => {
+                      setUserId(e.target.value);
+                      localStorage.setItem('metricool_userId', e.target.value);
+                    }}
+                    placeholder="4421531"
+                  />
+                </div>
+                <div className="form-group" style={{flex: 1}}>
+                  <label>Blog ID</label>
+                  <input 
+                    type="text" 
+                    value={blogId}
+                    onChange={(e) => {
+                      setBlogId(e.target.value);
+                      localStorage.setItem('metricool_blogId', e.target.value);
+                    }}
+                    placeholder="5704319"
+                  />
+                </div>
               </div>
+              
+              <button onClick={() => fetchChannels()} style={{marginBottom: '1rem'}}>
+                🔄 Fetch Channels
+              </button>
 
-              {channels.length > 0 && (
+              {channels.length > 0 ? (
                 <div className="channels-list">
                   <h4>Available Channels:</h4>
                   {channels.map(ch => (
@@ -850,6 +845,8 @@ function App() {
                     </div>
                   ))}
                 </div>
+              ) : (
+                <p className="hint">No channels found. Check your User ID and Blog ID.</p>
               )}
             </div>
           </div>

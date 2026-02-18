@@ -473,7 +473,7 @@ def get_mock_channels():
 
 @app.get("/api/metricool/channels")
 def get_metricool_channels(api_key: str, user_id: str = "4421531", blog_id: str = "5704319", username: str = Depends(verify_token)):
-    """Proxy to Metricool channels API"""
+    """Proxy to Metricool channels API - uses userId/blogId instead of workspaces"""
     try:
         resp = requests.get(
             f"{METRICOOL_BASE}/api/v1/channels",
