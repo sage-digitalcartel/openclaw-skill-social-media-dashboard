@@ -831,7 +831,7 @@ function App() {
                 </div>
               </div>
               
-              <button onClick={() => fetchChannels()} style={{marginBottom: '1rem'}}>
+              <button className="btn-primary" onClick={() => fetchChannels()}>
                 🔄 Fetch Channels
               </button>
 
