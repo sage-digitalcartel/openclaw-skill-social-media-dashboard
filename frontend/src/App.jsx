@@ -75,6 +75,7 @@ function App() {
   const [aiPlatform, setAiPlatform] = useState('linkedin');
   const [aiTone, setAiTone] = useState('professional');
   const [aiContent, setAiContent] = useState('');
+  const [aiNumPosts, setAiNumPosts] = useState(1);
   const [aiLoading, setAiLoading] = useState(false);
   const [aiError, setAiError] = useState('');
   const [aiBrandName, setAiBrandName] = useState(localStorage.getItem('brand_name') || 'Simply Desserts');
@@ -217,7 +218,8 @@ function App() {
     
     // Build prompt with research context if available
     let promptWithContext = aiTopic;
-    const competitorInstruction = aiExcludeCompetitors ? `- Do NOT mention competitor names or their pricing` : '';
+    const charLimit = aiPlatform === 'linkedin' ? '3000' : aiPlatform === 'twitter' ? '280' : '2200';
+    const platformNote = aiPlatform === 'linkedin' ? `- LinkedIn character limit: ${charLimit} chars` : aiPlatform === 'twitter' ? `- Twitter/X character limit: ${charLimit} chars` : `- Instagram character limit: ${charLimit} chars`;
     
     if (researchContext) {
       promptWithContext = `Topic: ${aiTopic}
@@ -228,15 +230,19 @@ ${researchContext}
 IMPORTANT INSTRUCTIONS:
 - Write as ${aiBrandName} - do NOT mention competitor names or their pricing
 - Focus on ${aiBrandName} products, quality, and unique selling points
-- Create an engaging social media post for ${aiPlatform} platform
+- Create ${aiNumPosts} different social media post(s) for ${aiPlatform} platform
 - Tone: ${aiTone}
-- Include relevant hashtags ${aiExcludeCompetitors ? '- but NO competitor mentions' : ''}`;
+- ${platformNote}
+- Each post should be unique and engaging
+- Include relevant hashtags but NO competitor mentions`;
     } else {
       // No research - just topic
-      promptWithContext = `Create an engaging social media post for ${aiBrandName} about: ${aiTopic}
+      promptWithContext = `Create ${aiNumPosts} unique social media post(s) for ${aiBrandName} about: ${aiTopic}
 - Platform: ${aiPlatform}
 - Tone: ${aiTone}
+- ${platformNote}
 - Write as ${aiBrandName} brand
+- Each post should be unique and engaging
 - Include relevant hashtags ${aiExcludeCompetitors ? '- but NO competitor mentions' : ''}`;
     }
     
@@ -1000,6 +1006,17 @@ IMPORTANT INSTRUCTIONS:
                     <option value="friendly">Friendly</option>
                     <option value="casual">Casual</option>
                     <option value="humorous">Humorous</option>
+                  </select>
+                </div>
+
+                <div className="form-group">
+                  <label># Posts</label>
+                  <select value={aiNumPosts} onChange={(e) => setAiNumPosts(parseInt(e.target.value))}>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
                   </select>
                 </div>
               </div>
