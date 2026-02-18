@@ -82,6 +82,7 @@ function App() {
   const [researchLoading, setResearchLoading] = useState(false);
   const [researchHistory, setResearchHistory] = useState([]);
   const [aiApiKey, setAiApiKey] = useState('');
+  const [savedMinimaxKey, setSavedMinimaxKey] = useState('');
 
   // Check for existing token on load
   useEffect(() => {
@@ -276,9 +277,27 @@ function App() {
       fetchApiKeys();
       // Load MiniMax key if saved
       const savedKey = localStorage.getItem('minimax_key');
-      if (savedKey) setAiApiKey(savedKey);
+      if (savedKey) {
+        setAiApiKey(savedKey);
+        setSavedMinimaxKey(savedKey);
+      }
+      // Also try to load from DB
+      fetchAIKeys();
     }
   }, [isAuthenticated]);
+
+  const fetchAIKeys = async () => {
+    try {
+      const res = await fetch(`${API_BASE}/api/ai/settings`, { headers: authHeader() });
+      const data = await res.json();
+      // Check if minimax is saved
+      if (data.providers && data.providers.includes('minimax')) {
+        setSavedMinimaxKey('••••••••••••'); // Masked indicator
+      }
+    } catch (e) {
+      console.error('Failed to load AI settings:', e);
+    }
+  };
 
   const handleAddApiKey = async (name, key) => {
     try {
@@ -711,16 +730,39 @@ function App() {
             <div className="settings-section">
               <h3>🤖 AI Settings (MiniMax)</h3>
               <p className="hint">Add your MiniMax API key to enable AI content generation</p>
-              <div className="api-key-form">
-                <input 
-                  type="password" 
-                  placeholder="MiniMax API Key" 
-                  value={aiApiKey}
-                  onChange={(e) => setAiApiKey(e.target.value)}
-                  style={{flex: 1}}
-                />
-                <button onClick={handleSaveAISettings}>Save</button>
-              </div>
+              {savedMinimaxKey ? (
+                <div className="saved-keys" style={{marginBottom: '1rem'}}>
+                  <div className="key-item">
+                    <span className="key-name">🤖 MiniMax: {savedMinimaxKey}</span>
+                    <button className="key-delete" onClick={async () => {
+                      if (!confirm('Remove MiniMax API key?')) return;
+                      try {
+                        await fetch(`${API_BASE}/api/ai/settings/minimax`, { 
+                          method: 'DELETE',
+                          headers: authHeader() 
+                        });
+                        setSavedMinimaxKey('');
+                        setAiApiKey('');
+                        localStorage.removeItem('minimax_key');
+                        alert('MiniMax API key removed');
+                      } catch (e) {
+                        alert('Failed to remove key');
+                      }
+                    }}>🗑️</button>
+                  </div>
+                </div>
+              ) : (
+                <div className="api-key-form">
+                  <input 
+                    type="password" 
+                    placeholder="MiniMax API Key" 
+                    value={aiApiKey}
+                    onChange={(e) => setAiApiKey(e.target.value)}
+                    style={{flex: 1}}
+                  />
+                  <button onClick={handleSaveAISettings}>Save</button>
+                </div>
+              )}
               <p className="hint" style={{marginTop: '0.5rem', fontSize: '0.85rem'}}>
                 Get your API key from <a href="https://platform.minimaxi.chat" target="_blank" rel="noopener">platform.minimaxi.chat</a>
               </p>
