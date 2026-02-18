@@ -16,6 +16,24 @@
       "scheduled_time": null,
       "created_at": "2026-02-17T13:39:15.497760",
       "published_at": "2026-02-17T13:39:26.463745"
+    },
+    {
+      "id": 3,
+      "content": "Test 2",
+      "hashtags": [
+        "#test2"
+      ],
+      "media_urls": [
+        "https://simplydesserts.us/",
+        "http://100.101.67.20:8000/uploads/1771339353.417395_IMAGE-1.jpg.jpeg"
+      ],
+      "platforms": [
+        "linkedin"
+      ],
+      "status": "published",
+      "scheduled_time": "2026-02-18T17:42",
+      "created_at": "2026-02-17T14:42:33.816612",
+      "published_at": "2026-02-17T14:42:42.149021"
     }
   ],
   "api_keys": {
