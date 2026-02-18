@@ -1,6 +1,109 @@
 import React, { useState, useEffect } from 'react';
 import './styles.css';
 
+// Draft Item Component
+function DraftItem({ draft, onUpdate, authHeader, API_BASE, showNotification }) {
+  const [content, setContent] = useState(draft.content);
+  const [platform, setPlatform] = useState(draft.platform || 'linkedin');
+  const [scheduledDate, setScheduledDate] = useState(draft.scheduled_date || '');
+  const [isEditing, setIsEditing] = useState(false);
+
+  const handleSave = async () => {
+    try {
+      const res = await fetch(`${API_BASE}/api/drafts/${draft.id}`, {
+        method: 'PATCH',
+        headers: { ...authHeader(), 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          content,
+          platform,
+          hashtags: '',
+          scheduled_date: scheduledDate
+        })
+      });
+      if (res.ok) {
+        showNotification('Draft updated!');
+        setIsEditing(false);
+        onUpdate();
+      }
+    } catch (e) {
+      showNotification('Failed to update draft', 'error');
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!confirm('Delete this draft?')) return;
+    try {
+      const res = await fetch(`${API_BASE}/api/drafts/${draft.id}`, {
+        method: 'DELETE',
+        headers: authHeader()
+      });
+      if (res.ok) {
+        showNotification('Draft deleted');
+        onUpdate();
+      }
+    } catch (e) {
+      showNotification('Failed to delete draft', 'error');
+    }
+  };
+
+  const handleSchedule = async () => {
+    if (!scheduledDate) {
+      showNotification('Please select a date', 'error');
+      return;
+    }
+    try {
+      const res = await fetch(`${API_BASE}/api/drafts/${draft.id}/schedule`, {
+        method: 'POST',
+        headers: { ...authHeader(), 'Content-Type': 'application/json' },
+        body: JSON.stringify({ scheduled_date: scheduledDate })
+      });
+      if (res.ok) {
+        showNotification('Scheduled to calendar! 📅');
+        onUpdate();
+      }
+    } catch (e) {
+      showNotification('Failed to schedule', 'error');
+    }
+  };
+
+  return (
+    <div className="draft-item">
+      <div className="draft-header">
+        <select value={platform} onChange={(e) => setPlatform(e.target.value)} disabled={!isEditing}>
+          <option value="linkedin">LinkedIn</option>
+          <option value="twitter">Twitter</option>
+          <option value="instagram">Instagram</option>
+        </select>
+        <div className="draft-actions">
+          {isEditing ? (
+            <button onClick={handleSave}>💾 Save</button>
+          ) : (
+            <button onClick={() => setIsEditing(true)}>✏️ Edit</button>
+          )}
+          <button onClick={handleDelete}>🗑️</button>
+        </div>
+      </div>
+      <textarea 
+        value={content} 
+        onChange={(e) => setContent(e.target.value)}
+        disabled={!isEditing}
+        rows={6}
+      />
+      <div className="draft-schedule">
+        <input 
+          type="datetime-local" 
+          value={scheduledDate}
+          onChange={(e) => setScheduledDate(e.target.value)}
+          min={new Date().toISOString().slice(0, 16)}
+        />
+        <button onClick={handleSchedule} disabled={!scheduledDate}>
+          📅 Add to Calendar
+        </button>
+      </div>
+    </div>
+  );
+}
+
 const API_BASE = 'http://100.101.67.20:8000';
 const METRICOOL_API = 'https://app.metricool.com/api/v1';
 
@@ -52,6 +155,7 @@ const PLATFORM_LOGOS = {
 function App() {
   const [view, setView] = useState('dashboard');
   const [posts, setPosts] = useState([]);
+  const [drafts, setDrafts] = useState([]);
   const [apiKeys, setApiKeys] = useState([]);
   const [channels, setChannels] = useState([]);
   const [userId, setUserId] = useState(localStorage.getItem('metricool_userId') || '4421531');
@@ -102,6 +206,7 @@ function App() {
     if (token) {
       setIsAuthenticated(true);
       fetchPosts();
+      fetchDrafts();
       fetchApiKeys();
       fetchResearchHistory();
       
@@ -134,6 +239,16 @@ function App() {
       setApiKeys(data.keys || []);
     } catch (e) {
       console.error('Failed to fetch keys:', e);
+    }
+  };
+
+  const fetchDrafts = async () => {
+    try {
+      const res = await fetch(`${API_BASE}/api/drafts`, { headers: authHeader() });
+      const data = await res.json();
+      setDrafts(data.drafts || []);
+    } catch (e) {
+      console.error('Failed to fetch drafts:', e);
     }
   };
 
@@ -657,6 +772,7 @@ IMPORTANT INSTRUCTIONS:
         <button className={view === 'dashboard' ? 'active' : ''} onClick={() => setView('dashboard')}>📊 Dashboard</button>
         <button className={view === 'create' ? 'active' : ''} onClick={() => setView('create')}>✏️ Create Post</button>
         <button className={view === 'posts' ? 'active' : ''} onClick={() => setView('posts')}>📝 Posts</button>
+        <button className={view === 'drafts' ? 'active' : ''} onClick={() => { fetchDrafts(); setView('drafts'); }}>📋 Drafts</button>
         <button className={view === 'ai-generate' ? 'active' : ''} onClick={() => setView('ai-generate')}>✨ AI Generate</button>
         <button className={view === 'ai-research' ? 'active' : ''} onClick={() => setView('ai-research')}>🔍 AI Research</button>
         <button className={view === 'settings' ? 'active' : ''} onClick={() => setView('settings')}>⚙️ Settings</button>
@@ -844,6 +960,31 @@ IMPORTANT INSTRUCTIONS:
                       <button onClick={() => handleDelete(post.id)}>🗑️ Delete</button>
                     </div>
                   </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Drafts View */}
+        {view === 'drafts' && (
+          <div className="drafts">
+            <h2>📋 Drafts</h2>
+            <p className="hint">Edit your content and schedule to calendar</p>
+            
+            {drafts.length === 0 ? (
+              <p>No drafts yet. Generate content in AI Generate and save to drafts!</p>
+            ) : (
+              <div className="drafts-list">
+                {drafts.map((draft) => (
+                  <DraftItem 
+                    key={draft.id} 
+                    draft={draft} 
+                    onUpdate={fetchDrafts}
+                    authHeader={authHeader}
+                    API_BASE={API_BASE}
+                    showNotification={showNotification}
+                  />
                 ))}
               </div>
             )}
@@ -1056,6 +1197,25 @@ IMPORTANT INSTRUCTIONS:
                       setNewPost({...newPost, content: aiContent});
                       setView('create');
                     }}>📝 Edit & Create Post</button>
+                    <button onClick={async () => {
+                      try {
+                        const res = await fetch(`${API_BASE}/api/drafts`, {
+                          method: 'POST',
+                          headers: { ...authHeader(), 'Content-Type': 'application/json' },
+                          body: JSON.stringify({ 
+                            content: aiContent,
+                            platform: aiPlatform,
+                            hashtags: ''
+                          })
+                        });
+                        if (res.ok) {
+                          showNotification('Saved to Drafts! 📋');
+                          fetchDrafts();
+                        }
+                      } catch (e) {
+                        showNotification('Failed to save draft', 'error');
+                      }
+                    }}>💾 Save to Drafts</button>
                     <button onClick={() => navigator.clipboard.writeText(aiContent)}>📋 Copy</button>
                   </div>
                 </div>

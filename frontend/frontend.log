@@ -111,9 +111,15 @@ Port 5173 is in use, trying another one...
 12:52:19 PM [vite] hmr update /src/App.jsx
 12:52:59 PM [vite] hmr update /src/App.jsx
 12:53:41 PM [vite] hmr update /src/App.jsx
-dashboard/frontend/node_modules/postcss/lib/processor.js:53:14)
-      at compileCSS (file:///home/user/GitRepos/social-media-dashboard/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:36898:59)
-      at async TransformPluginContext.transform (file:///home/user/GitRepos/social-media-dashboard/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:36171:11)
+1:11:22 PM [vite] hmr update /src/App.jsx
+1:11:36 PM [vite] hmr update /src/App.jsx
+1:12:11 PM [vite] hmr update /src/App.jsx
+1:12:22 PM [vite] hmr update /src/App.jsx
+1:12:54 PM [vite] hmr update /src/App.jsx
+1:13:29 PM [vite] hmr update /src/App.jsx
+1:13:53 PM [vite] hmr update /src/App.jsx
+1:14:05 PM [vite] hmr update /src/styles.css
+e/chunks/dep-BK3b2jBa.js:36171:11)
       at async PluginContainer.transform (file:///home/user/GitRepos/social-media-dashboard/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49099:18)
       at async loadAndTransform (file:///home/user/GitRepos/social-media-dashboard/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:51978:27)
       at async viteTransformMiddleware (file:///home/user/GitRepos/social-media-dashboard/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:62106:24)
@@ -941,3 +947,11 @@ dashboard/frontend/node_modules/postcss/lib/processor.js:53:14)
 12:52:19 PM [vite] hmr update /src/App.jsx
 12:52:59 PM [vite] hmr update /src/App.jsx
 12:53:41 PM [vite] hmr update /src/App.jsx
+1:11:22 PM [vite] hmr update /src/App.jsx
+1:11:36 PM [vite] hmr update /src/App.jsx
+1:12:11 PM [vite] hmr update /src/App.jsx
+1:12:22 PM [vite] hmr update /src/App.jsx
+1:12:54 PM [vite] hmr update /src/App.jsx
+1:13:29 PM [vite] hmr update /src/App.jsx
+1:13:53 PM [vite] hmr update /src/App.jsx
+1:14:05 PM [vite] hmr update /src/styles.css

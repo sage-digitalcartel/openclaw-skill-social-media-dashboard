@@ -737,3 +737,98 @@ def publish_post(post_id: int, api_key: str, user_id: str = "4421531", blog_id: 
         post.publish_status = "published"
         db.commit()
         return {"message": "Post published (mock)", "error": str(e)}
+
+# ============ Drafts (Staging) ============
+
+class DraftCreate(BaseModel):
+    content: str
+    platform: str = "linkedin"
+    hashtags: Optional[str] = ""
+    scheduled_date: Optional[str] = None
+
+@app.post("/api/drafts", tags=["drafts"])
+def save_draft(draft: DraftCreate, username: str = Depends(verify_token), db = Depends(get_db)):
+    """Save content as a draft"""
+    new_draft = DBPost(
+        user_id=username,
+        body=draft.content,
+        hashtags=draft.hashtags,
+        page_name=draft.platform,
+        publish_status="draft",
+        scheduled_for=draft.scheduled_date
+    )
+    db.add(new_draft)
+    db.commit()
+    db.refresh(new_draft)
+    return {"message": "Draft saved", "id": new_draft.id, "draft": new_draft}
+
+@app.get("/api/drafts", tags=["drafts"])
+def get_drafts(username: str = Depends(verify_token), db = Depends(get_db)):
+    """Get all drafts"""
+    drafts = db.query(DBPost).filter(
+        DBPost.user_id == username,
+        DBPost.publish_status == "draft"
+    ).order_by(DBPost.created_at.desc()).all()
+    
+    return {"drafts": [{
+        "id": d.id,
+        "content": d.body,
+        "platform": d.page_name or "linkedin",
+        "hashtags": d.hashtags,
+        "scheduled_date": d.scheduled_for,
+        "created_at": d.created_at.isoformat() if d.created_at else None
+    } for d in drafts]}
+
+@app.patch("/api/drafts/{draft_id}", tags=["drafts"])
+def update_draft(draft_id: int, draft: DraftCreate, username: str = Depends(verify_token), db = Depends(get_db)):
+    """Update a draft"""
+    post = db.query(DBPost).filter(
+        DBPost.id == draft_id,
+        DBPost.user_id == username,
+        DBPost.publish_status == "draft"
+    ).first()
+    
+    if not post:
+        raise HTTPException(status_code=404, detail="Draft not found")
+    
+    post.body = draft.content
+    post.page_name = draft.platform
+    post.hashtags = draft.hashtags
+    post.scheduled_for = draft.scheduled_date
+    db.commit()
+    
+    return {"message": "Draft updated", "id": post.id}
+
+@app.delete("/api/drafts/{draft_id}", tags=["drafts"])
+def delete_draft(draft_id: int, username: str = Depends(verify_token), db = Depends(get_db)):
+    """Delete a draft"""
+    post = db.query(DBPost).filter(
+        DBPost.id == draft_id,
+        DBPost.user_id == username,
+        DBPost.publish_status == "draft"
+    ).first()
+    
+    if not post:
+        raise HTTPException(status_code=404, detail="Draft not found")
+    
+    db.delete(post)
+    db.commit()
+    return {"message": "Draft deleted"}
+
+@app.post("/api/drafts/{draft_id}/schedule", tags=["drafts"])
+def schedule_draft(draft_id: int, scheduled_date: str, username: str = Depends(verify_token), db = Depends(get_db)):
+    """Move draft to calendar (scheduled)"""
+    post = db.query(DBPost).filter(
+        DBPost.id == draft_id,
+        DBPost.user_id == username,
+        DBPost.publish_status == "draft"
+    ).first()
+    
+    if not post:
+        raise HTTPException(status_code=404, detail="Draft not found")
+    
+    post.publish_status = "scheduled"
+    post.scheduled_for = scheduled_date
+    db.commit()
+    
+    return {"message": "Draft scheduled", "id": post.id, "scheduled_date": scheduled_date}

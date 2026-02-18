@@ -999,3 +999,88 @@ body {
   font-size: 0.8rem;
   color: var(--gray);
 }
+
+/* Drafts */
+.drafts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.draft-item {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.draft-item textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-family: inherit;
+  resize: vertical;
+  margin: 1rem 0;
+}
+
+.draft-item textarea:disabled {
+  background: var(--light);
+}
+
+.draft-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.draft-header select {
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: white;
+}
+
+.draft-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.draft-actions button {
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.draft-actions button:hover {
+  background: var(--light);
+}
+
+.draft-schedule {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.draft-schedule input {
+  padding: 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.draft-schedule button {
+  padding: 0.5rem 1rem;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.draft-schedule button:disabled {
+  background: var(--gray);
+  cursor: not-allowed;
+}
