@@ -79,7 +79,6 @@ function App() {
   const [aiError, setAiError] = useState('');
   const [researchQuery, setResearchQuery] = useState('');
   const [researchMarket, setResearchMarket] = useState('Global');
-  const [researchCompetitors, setResearchCompetitors] = useState('');
   const [researchContext, setResearchContext] = useState(''); // For passing to AI Generate
   const [researchResult, setResearchResult] = useState('');
   const [researchLoading, setResearchLoading] = useState(false);
@@ -248,7 +247,7 @@ function App() {
     setIsLoading(true);
     setLoadingMessage(`🔍 Researching "${researchQuery}"...`);
     
-    // Build query with market and competitor context
+    // Build query with market context
     let fullQuery = researchQuery;
     
     // Add market context
@@ -256,10 +255,8 @@ function App() {
       fullQuery += ` - Focus on ${researchMarket} market trends and insights`;
     }
     
-    // Add competitor context if provided
-    if (researchCompetitors.trim()) {
-      fullQuery += `. Also analyze competitors in this space: ${researchCompetitors}`;
-    }
+    // Always include competitor analysis
+    fullQuery += `. Include key competitors, their pricing, and market positioning.`;
     
     try {
       const res = await fetch(`${API_BASE}/api/ai/research`, {
@@ -1006,16 +1003,6 @@ function App() {
                     <option value="Europe">Europe</option>
                     <option value="Australia">Australia</option>
                   </select>
-                </div>
-                
-                <div className="form-group">
-                  <label>Competitors (optional)</label>
-                  <input 
-                    type="text" 
-                    placeholder="e.g. Premier Protein, Muscle Milk..."
-                    value={researchCompetitors}
-                    onChange={(e) => setResearchCompetitors(e.target.value)}
-                  />
                 </div>
               </div>
               
