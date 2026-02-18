@@ -1077,7 +1077,7 @@ function App() {
                       setResearchResult(item.result);
                       setResearchQuery(item.query);
                     }}>
-                      <strong>{item.query.length > 40 ? item.query.substring(0, 40) + '...' : item.query}</strong>
+                      <strong>{item.query}</strong>
                       <span className="history-date">{new Date(item.created_at).toLocaleDateString()}</span>
                     </div>
                     <button 
