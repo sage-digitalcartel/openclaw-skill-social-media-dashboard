@@ -79,6 +79,7 @@ function App() {
   const [aiError, setAiError] = useState('');
   const [researchQuery, setResearchQuery] = useState('');
   const [researchMarket, setResearchMarket] = useState('Global');
+  const [researchCompetitors, setResearchCompetitors] = useState('');
   const [researchContext, setResearchContext] = useState(''); // For passing to AI Generate
   const [researchResult, setResearchResult] = useState('');
   const [researchLoading, setResearchLoading] = useState(false);
@@ -247,10 +248,18 @@ function App() {
     setIsLoading(true);
     setLoadingMessage(`🔍 Researching "${researchQuery}"...`);
     
-    // Build query with market context
-    const fullQuery = researchMarket !== 'Global' 
-      ? `${researchQuery} - Focus on ${researchMarket} market trends and insights`
-      : researchQuery;
+    // Build query with market and competitor context
+    let fullQuery = researchQuery;
+    
+    // Add market context
+    if (researchMarket !== 'Global') {
+      fullQuery += ` - Focus on ${researchMarket} market trends and insights`;
+    }
+    
+    // Add competitor context if provided
+    if (researchCompetitors.trim()) {
+      fullQuery += `. Also analyze competitors in this space: ${researchCompetitors}`;
+    }
     
     try {
       const res = await fetch(`${API_BASE}/api/ai/research`, {
@@ -983,19 +992,31 @@ function App() {
                 />
               </div>
               
-              <div className="form-group">
-                <label>Market</label>
-                <select 
-                  value={researchMarket}
-                  onChange={(e) => setResearchMarket(e.target.value)}
-                >
-                  <option value="Global">Global</option>
-                  <option value="USA">USA</option>
-                  <option value="UK">UK</option>
-                  <option value="South Africa">South Africa</option>
-                  <option value="Europe">Europe</option>
-                  <option value="Australia">Australia</option>
-                </select>
+              <div className="form-row">
+                <div className="form-group">
+                  <label>Market</label>
+                  <select 
+                    value={researchMarket}
+                    onChange={(e) => setResearchMarket(e.target.value)}
+                  >
+                    <option value="Global">Global</option>
+                    <option value="USA">USA</option>
+                    <option value="UK">UK</option>
+                    <option value="South Africa">South Africa</option>
+                    <option value="Europe">Europe</option>
+                    <option value="Australia">Australia</option>
+                  </select>
+                </div>
+                
+                <div className="form-group">
+                  <label>Competitors (optional)</label>
+                  <input 
+                    type="text" 
+                    placeholder="e.g. Premier Protein, Muscle Milk..."
+                    value={researchCompetitors}
+                    onChange={(e) => setResearchCompetitors(e.target.value)}
+                  />
+                </div>
               </div>
               
               <button 
@@ -1009,7 +1030,7 @@ function App() {
               {researchResult && (
                 <div className="research-result">
                   <h3>Results:</h3>
-                  <div className="content-box">{researchResult}</div>
+                  <div className="content-box formatted-research">{researchResult}</div>
                   <button 
                     className="btn-primary" 
                     onClick={handleUseForContent}
@@ -1023,16 +1044,20 @@ function App() {
             
             {researchHistory.length > 0 && (
               <div className="research-history">
-                <h3>Recent Research</h3>
-                {researchHistory.map((item, i) => (
+                <h3>Recent Research ({researchHistory.length})</h3>
+                <p className="hint">Click to view • Max 20 saved</p>
+                {researchHistory.slice(0, 5).map((item, i) => (
                   <div key={i} className="history-item" onClick={() => {
                     setResearchResult(item.result);
                     setResearchQuery(item.query);
                   }}>
-                    <strong>{item.query}</strong>
-                    <span>{new Date(item.created_at).toLocaleDateString()}</span>
+                    <strong>{item.query.length > 50 ? item.query.substring(0, 50) + '...' : item.query}</strong>
+                    <span className="history-date">{new Date(item.created_at).toLocaleDateString()}</span>
                   </div>
                 ))}
+                {researchHistory.length > 5 && (
+                  <p className="hint" style={{marginTop: '0.5rem'}}>+ {researchHistory.length - 5} more in history</p>
+                )}
               </div>
             )}
           </div>
