@@ -70,6 +70,19 @@ function App() {
     scheduleDate: ''
   });
 
+  // AI State
+  const [aiTopic, setAiTopic] = useState('');
+  const [aiPlatform, setAiPlatform] = useState('linkedin');
+  const [aiTone, setAiTone] = useState('professional');
+  const [aiContent, setAiContent] = useState('');
+  const [aiLoading, setAiLoading] = useState(false);
+  const [aiError, setAiError] = useState('');
+  const [researchQuery, setResearchQuery] = useState('');
+  const [researchResult, setResearchResult] = useState('');
+  const [researchLoading, setResearchLoading] = useState(false);
+  const [researchHistory, setResearchHistory] = useState([]);
+  const [aiApiKey, setAiApiKey] = useState('');
+
   // Check for existing token on load
   useEffect(() => {
     if (token) {
@@ -172,10 +185,98 @@ function App() {
     setPassword('');
   };
 
+  // AI Handlers
+  const handleAIGenerate = async () => {
+    if (!aiTopic.trim()) {
+      setAiError('Please enter a topic');
+      return;
+    }
+    setAiLoading(true);
+    setAiError('');
+    setAiContent('');
+    
+    try {
+      const res = await fetch(`${API_BASE}/api/ai/generate`, {
+        method: 'POST',
+        headers: { ...authHeader(), 'Content-Type': 'application/json' },
+        body: JSON.stringify({ topic: aiTopic, platform: aiPlatform, tone: aiTone })
+      });
+      const data = await res.json();
+      
+      if (data.detail) {
+        setAiError(data.detail);
+      } else if (data.content) {
+        setAiContent(data.content);
+      } else {
+        setAiError('No content generated');
+      }
+    } catch (e) {
+      setAiError('Failed to generate: ' + e.message);
+    } finally {
+      setAiLoading(false);
+    }
+  };
+
+  const handleAIResearch = async () => {
+    if (!researchQuery.trim()) {
+      alert('Please enter a research query');
+      return;
+    }
+    setResearchLoading(true);
+    
+    try {
+      const res = await fetch(`${API_BASE}/api/ai/research`, {
+        method: 'POST',
+        headers: { ...authHeader(), 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query: researchQuery })
+      });
+      const data = await res.json();
+      
+      if (data.result) {
+        setResearchResult(data.result);
+        // Refresh history
+        const historyRes = await fetch(`${API_BASE}/api/ai/research`, { headers: authHeader() });
+        const historyData = await historyRes.json();
+        setResearchHistory(historyData.results || []);
+      } else if (data.detail) {
+        alert(data.detail);
+      }
+    } catch (e) {
+      alert('Research failed: ' + e.message);
+    } finally {
+      setResearchLoading(false);
+    }
+  };
+
+  const handleSaveAISettings = async () => {
+    if (!aiApiKey.trim()) {
+      alert('Please enter your MiniMax API key');
+      return;
+    }
+    try {
+      const res = await fetch(`${API_BASE}/api/ai/settings`, {
+        method: 'POST',
+        headers: { ...authHeader(), 'Content-Type': 'application/json' },
+        body: JSON.stringify({ provider: 'minimax', api_key: aiApiKey })
+      });
+      if (res.ok) {
+        alert('AI Settings saved! You can now generate content.');
+        localStorage.setItem('minimax_key', aiApiKey);
+      } else {
+        alert('Failed to save settings');
+      }
+    } catch (e) {
+      alert('Failed to save: ' + e.message);
+    }
+  };
+
   useEffect(() => {
     if (isAuthenticated) {
       fetchPosts();
       fetchApiKeys();
+      // Load MiniMax key if saved
+      const savedKey = localStorage.getItem('minimax_key');
+      if (savedKey) setAiApiKey(savedKey);
     }
   }, [isAuthenticated]);
 
@@ -409,6 +510,8 @@ function App() {
         <button className={view === 'dashboard' ? 'active' : ''} onClick={() => setView('dashboard')}>📊 Dashboard</button>
         <button className={view === 'create' ? 'active' : ''} onClick={() => setView('create')}>✏️ Create Post</button>
         <button className={view === 'posts' ? 'active' : ''} onClick={() => setView('posts')}>📝 Posts</button>
+        <button className={view === 'ai-generate' ? 'active' : ''} onClick={() => setView('ai-generate')}>✨ AI Generate</button>
+        <button className={view === 'ai-research' ? 'active' : ''} onClick={() => setView('ai-research')}>🔍 AI Research</button>
         <button className={view === 'settings' ? 'active' : ''} onClick={() => setView('settings')}>⚙️ Settings</button>
       </nav>
 
@@ -603,6 +706,26 @@ function App() {
         {view === 'settings' && (
           <div className="settings">
             <h2>⚙️ Settings</h2>
+            
+            {/* AI Settings */}
+            <div className="settings-section">
+              <h3>🤖 AI Settings (MiniMax)</h3>
+              <p className="hint">Add your MiniMax API key to enable AI content generation</p>
+              <div className="api-key-form">
+                <input 
+                  type="password" 
+                  placeholder="MiniMax API Key" 
+                  value={aiApiKey}
+                  onChange={(e) => setAiApiKey(e.target.value)}
+                  style={{flex: 1}}
+                />
+                <button onClick={handleSaveAISettings}>Save</button>
+              </div>
+              <p className="hint" style={{marginTop: '0.5rem', fontSize: '0.85rem'}}>
+                Get your API key from <a href="https://platform.minimaxi.chat" target="_blank" rel="noopener">platform.minimaxi.chat</a>
+              </p>
+            </div>
+
             <div className="settings-section">
               <h3>🔑 Metricool API Keys</h3>
               <div className="api-key-form">
@@ -683,6 +806,118 @@ function App() {
                 </div>
               )}
             </div>
+          </div>
+        )}
+
+        {/* AI Content Generation */}
+        {view === 'ai-generate' && (
+          <div className="ai-generate">
+            <h2>✨ AI Content Generator</h2>
+            <p className="hint">Generate engaging social media posts with AI</p>
+            
+            <div className="ai-form">
+              <div className="form-group">
+                <label>Topic / Subject</label>
+                <input 
+                  type="text" 
+                  placeholder="e.g. Sustainable baking ingredients, New product launch..."
+                  value={aiTopic}
+                  onChange={(e) => setAiTopic(e.target.value)}
+                />
+              </div>
+              
+              <div className="form-row">
+                <div className="form-group">
+                  <label>Platform</label>
+                  <select value={aiPlatform} onChange={(e) => setAiPlatform(e.target.value)}>
+                    <option value="linkedin">LinkedIn</option>
+                    <option value="twitter">Twitter</option>
+                    <option value="instagram">Instagram</option>
+                  </select>
+                </div>
+                
+                <div className="form-group">
+                  <label>Tone</label>
+                  <select value={aiTone} onChange={(e) => setAiTone(e.target.value)}>
+                    <option value="professional">Professional</option>
+                    <option value="friendly">Friendly</option>
+                    <option value="casual">Casual</option>
+                    <option value="humorous">Humorous</option>
+                  </select>
+                </div>
+              </div>
+              
+              <button 
+                className="btn-primary" 
+                onClick={handleAIGenerate}
+                disabled={aiLoading}
+              >
+                {aiLoading ? '⏳ Generating...' : '✨ Generate Content'}
+              </button>
+              
+              {aiError && <div className="error-message">{aiError}</div>}
+              
+              {aiContent && (
+                <div className="generated-content">
+                  <h3>Generated Content:</h3>
+                  <div className="content-box">{aiContent}</div>
+                  <div className="content-actions">
+                    <button onClick={() => {
+                      setNewPost({...newPost, content: aiContent});
+                      setView('create');
+                    }}>📝 Edit & Create Post</button>
+                    <button onClick={() => navigator.clipboard.writeText(aiContent)}>📋 Copy</button>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* AI Research */}
+        {view === 'ai-research' && (
+          <div className="ai-research">
+            <h2>🔍 AI Research</h2>
+            <p className="hint">Research topics before creating content</p>
+            
+            <div className="ai-form">
+              <div className="form-group">
+                <label>Research Query</label>
+                <input 
+                  type="text" 
+                  placeholder="e.g. Latest trends in sustainable food packaging..."
+                  value={researchQuery}
+                  onChange={(e) => setResearchQuery(e.target.value)}
+                />
+              </div>
+              
+              <button 
+                className="btn-primary" 
+                onClick={handleAIResearch}
+                disabled={researchLoading}
+              >
+                {researchLoading ? '⏳ Researching...' : '🔍 Research'}
+              </button>
+              
+              {researchResult && (
+                <div className="research-result">
+                  <h3>Results:</h3>
+                  <div className="content-box">{researchResult}</div>
+                </div>
+              )}
+            </div>
+            
+            {researchHistory.length > 0 && (
+              <div className="research-history">
+                <h3>Recent Research</h3>
+                {researchHistory.map((item, i) => (
+                  <div key={i} className="history-item" onClick={() => setResearchResult(item.result)}>
+                    <strong>{item.query}</strong>
+                    <span>{new Date(item.created_at).toLocaleDateString()}</span>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         )}
       </main>
