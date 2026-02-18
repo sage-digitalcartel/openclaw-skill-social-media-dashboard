@@ -947,9 +947,8 @@ body {
 
 .history-item {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 0.75rem 1rem;
+  justify-content: space-between;
   background: var(--light);
   border-radius: 8px;
   margin-bottom: 0.5rem;

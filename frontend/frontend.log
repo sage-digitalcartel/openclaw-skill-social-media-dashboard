@@ -86,7 +86,8 @@ Port 5173 is in use, trying another one...
 12:15:35 PM [vite] hmr update /src/App.jsx
 12:16:00 PM [vite] hmr update /src/App.jsx
 12:16:18 PM [vite] hmr update /src/styles.css
-tend/src/styles.css:85:3: Unknown word border-radius
+12:18:12 PM [vite] hmr update /src/styles.css
+radius
   Plugin: vite:css
   File: /home/user/GitRepos/social-media-dashboard/frontend/src/styles.css:85:2
   83 |    padding: 1rem;
@@ -598,3 +599,4 @@ tend/src/styles.css:85:3: Unknown word border-radius
 12:15:35 PM [vite] hmr update /src/App.jsx
 12:16:00 PM [vite] hmr update /src/App.jsx
 12:16:18 PM [vite] hmr update /src/styles.css
+12:18:12 PM [vite] hmr update /src/styles.css
