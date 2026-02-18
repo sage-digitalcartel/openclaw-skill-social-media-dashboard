@@ -673,8 +673,8 @@ def delete_post(post_id: int, username: str = Depends(verify_token), db = Depend
     return {"message": "Post deleted"}
 
 @app.post("/api/posts/{post_id}/publish", tags=["posts"])
-def publish_post(post_id: int, workspace_id: str, api_key: str, scheduled_time: Optional[str] = None, username: str = Depends(verify_token), db = Depends(get_db)):
-    """Publish a post via Metricool"""
+def publish_post(post_id: int, api_key: str, user_id: str = "4421531", blog_id: str = "5704319", scheduled_time: Optional[str] = None, username: str = Depends(verify_token), db = Depends(get_db)):
+    """Publish a post via Metricool using userId/blogId"""
     post = db.query(DBPost).filter(DBPost.id == post_id).first()
     if not post:
         raise HTTPException(status_code=404, detail="Post not found")
@@ -706,7 +706,7 @@ def publish_post(post_id: int, workspace_id: str, api_key: str, scheduled_time: 
         resp = requests.post(
             f"{METRICOOL_BASE}/api/v2/scheduler/posts",
             headers={**METRICOOL_HEADERS, "X-Mc-Auth": api_key, "Content-Type": "application/json"},
-            params={"userId": "4421531", "blogId": "5704319"},
+            params={"userId": user_id, "blogId": blog_id},
             json=scheduler_data,
             verify=False,
             timeout=10
