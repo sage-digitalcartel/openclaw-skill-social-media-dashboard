@@ -1021,7 +1021,7 @@ IMPORTANT INSTRUCTIONS:
                 </div>
               </div>
               
-              <div className="form-row" style={{alignItems: 'center'}}>
+              <div className="form-row" style={{alignItems: 'center', marginTop: '1.5rem'}}>
                 <div className="form-group" style={{marginBottom: 0, flex: 1}}>
                   <label>Brand Name</label>
                   <input 
