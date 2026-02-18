@@ -86,6 +86,8 @@ function App() {
   const [aiApiKey, setAiApiKey] = useState('');
   const [savedMinimaxKey, setSavedMinimaxKey] = useState('');
   const [notification, setNotification] = useState({ message: '', type: '' });
+  const [isLoading, setIsLoading] = useState(false);
+  const [loadingMessage, setLoadingMessage] = useState('');
 
   // Show inline notification
   const showNotification = (message, type = 'success') => {
@@ -195,6 +197,8 @@ function App() {
       return;
     }
     setAiLoading(true);
+    setIsLoading(true);
+    setLoadingMessage(`✨ Generating content for ${aiPlatform}...`);
     setAiError('');
     setAiContent('');
     
@@ -229,6 +233,8 @@ function App() {
       setAiError('Failed to generate: ' + e.message);
     } finally {
       setAiLoading(false);
+      setIsLoading(false);
+      setLoadingMessage('');
     }
   };
 
@@ -238,6 +244,8 @@ function App() {
       return;
     }
     setResearchLoading(true);
+    setIsLoading(true);
+    setLoadingMessage(`🔍 Researching "${researchQuery}"...`);
     
     // Build query with market context
     const fullQuery = researchMarket !== 'Global' 
@@ -266,6 +274,8 @@ function App() {
       showNotification('Research failed: ' + e.message, 'error');
     } finally {
       setResearchLoading(false);
+      setIsLoading(false);
+      setLoadingMessage('');
     }
   };
 
@@ -547,6 +557,12 @@ function App() {
 
   return (
     <div className="app">
+      {isLoading && (
+        <div className="loading-bar">
+          <div className="loading-spinner"></div>
+          <span>{loadingMessage}</span>
+        </div>
+      )}
       <header className="header">
         <div className="header-left">
           <img src="https://simplydesserts.us/wp-content/uploads/2024/09/logo.png" alt="Simply Desserts" className="header-logo" />

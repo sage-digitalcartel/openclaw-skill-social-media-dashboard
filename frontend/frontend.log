@@ -61,9 +61,14 @@ Port 5173 is in use, trying another one...
 11:54:52 AM [vite] hmr update /src/App.jsx
 11:55:01 AM [vite] hmr update /src/App.jsx
 11:55:32 AM [vite] hmr update /src/App.jsx
-pos/social-media-dashboard/frontend/node_modules/postcss/lib/lazy-result.js:165:16)
-      at Processor.process (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/postcss/lib/processor.js:53:14)
-      at compileCSS (file:///home/user/GitRepos/social-media-dashboard/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:36898:59)
+11:59:03 AM [vite] hmr update /src/App.jsx
+11:59:26 AM [vite] hmr update /src/App.jsx
+11:59:52 AM [vite] hmr update /src/App.jsx
+12:00:08 PM [vite] hmr update /src/App.jsx
+12:00:33 PM [vite] hmr update /src/App.jsx
+12:01:03 PM [vite] hmr update /src/App.jsx
+12:01:20 PM [vite] hmr update /src/styles.css
+te/dist/node/chunks/dep-BK3b2jBa.js:36898:59)
       at async TransformPluginContext.transform (file:///home/user/GitRepos/social-media-dashboard/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:36171:11)
       at async PluginContainer.transform (file:///home/user/GitRepos/social-media-dashboard/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49099:18)
       at async loadAndTransform (file:///home/user/GitRepos/social-media-dashboard/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:51978:27)
@@ -421,3 +426,10 @@ pos/social-media-dashboard/frontend/node_modules/postcss/lib/lazy-result.js:165:
       at JSXParserMixin.parseStatementLike (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:12767:17)
       at JSXParserMixin.parseStatementListItem (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:12747:17)
 11:55:32 AM [vite] hmr update /src/App.jsx
+11:59:03 AM [vite] hmr update /src/App.jsx
+11:59:26 AM [vite] hmr update /src/App.jsx
+11:59:52 AM [vite] hmr update /src/App.jsx
+12:00:08 PM [vite] hmr update /src/App.jsx
+12:00:33 PM [vite] hmr update /src/App.jsx
+12:01:03 PM [vite] hmr update /src/App.jsx
+12:01:20 PM [vite] hmr update /src/styles.css
