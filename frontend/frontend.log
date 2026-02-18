@@ -52,8 +52,8 @@ Port 5173 is in use, trying another one...
 11:35:17 AM [vite] hmr update /src/styles.css
 11:37:33 AM [vite] hmr update /src/App.jsx
 11:39:02 AM [vite] hmr update /src/App.jsx
-
-      at Parser.other (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/postcss/lib/parser.js:437:12)
+11:45:38 AM [vite] hmr update /src/App.jsx
+/social-media-dashboard/frontend/node_modules/postcss/lib/parser.js:437:12)
       at Parser.parse (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/postcss/lib/parser.js:472:16)
       at parse (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/postcss/lib/parse.js:11:12)
       at new LazyResult (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/postcss/lib/lazy-result.js:165:16)
@@ -139,3 +139,4 @@ Port 5173 is in use, trying another one...
 11:35:17 AM [vite] hmr update /src/styles.css
 11:37:33 AM [vite] hmr update /src/App.jsx
 11:39:02 AM [vite] hmr update /src/App.jsx
+11:45:38 AM [vite] hmr update /src/App.jsx

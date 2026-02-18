@@ -131,20 +131,23 @@ function App() {
   };
 
   const fetchChannels = async () => {
-    if (!token) return;
+    if (!token) {
+      console.log('No token yet, skipping channel fetch');
+      return;
+    }
     const apiKey = localStorage.getItem('metricool_key');
     if (!apiKey) {
-      // No API key yet - don't show error, just skip silently
+      console.log('No API key saved yet, skipping channel fetch');
       return;
     }
     try {
       // Use userId/blogId directly to get channels
-      const res = await fetch(`${API_BASE}/api/metricool/channels?api_key=${apiKey}&user_id=${userId}&blog_id=${blogId}`, { headers: authHeader() });
+      const res = await fetch(`${API_BASE}/api/metricool/channels?api_key=${apiKey}&user_id=${userId}&blog_id=${blogId}`, { 
+        headers: authHeader() 
+      });
       const data = await res.json();
       setChannels(data.data || []);
-      if (data.data?.length === 0) {
-        showNotification('No channels found. Check your userId/blogId.', 'error');
-      } else if (data._mock) {
+      if (data._mock) {
         console.log('Using mock channels (API unreachable)');
       }
     } catch (e) {
