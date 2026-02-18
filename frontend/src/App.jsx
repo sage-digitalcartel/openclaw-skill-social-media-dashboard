@@ -296,6 +296,33 @@ function App() {
     showNotification('Research loaded into AI Generate. Add context prompt and generate!');
   };
 
+  const handleDeleteResearch = async (researchId) => {
+    if (!confirm('Delete this research?')) return;
+    
+    try {
+      const res = await fetch(`${API_BASE}/api/ai/research/${researchId}`, {
+        method: 'DELETE',
+        headers: authHeader()
+      });
+      
+      if (res.ok) {
+        // Refresh history
+        const historyRes = await fetch(`${API_BASE}/api/ai/research`, { headers: authHeader() });
+        const historyData = await historyRes.json();
+        setResearchHistory(historyData.results || []);
+        
+        // Clear result if it was the deleted one
+        if (researchResult && !historyData.results?.find(r => r.result === researchResult)) {
+          setResearchResult('');
+          setResearchQuery('');
+        }
+        showNotification('Research deleted');
+      }
+    } catch (e) {
+      showNotification('Failed to delete research', 'error');
+    }
+  };
+
   const handleSaveAISettings = async () => {
     if (!aiApiKey.trim()) {
       showNotification('Please enter your MiniMax API key', 'error');
@@ -1034,12 +1061,22 @@ function App() {
                 <h3>Recent Research ({researchHistory.length})</h3>
                 <p className="hint">Click to view • Max 20 saved</p>
                 {researchHistory.slice(0, 5).map((item, i) => (
-                  <div key={i} className="history-item" onClick={() => {
-                    setResearchResult(item.result);
-                    setResearchQuery(item.query);
-                  }}>
-                    <strong>{item.query.length > 50 ? item.query.substring(0, 50) + '...' : item.query}</strong>
-                    <span className="history-date">{new Date(item.created_at).toLocaleDateString()}</span>
+                  <div key={i} className="history-item">
+                    <div className="history-item-content" onClick={() => {
+                      setResearchResult(item.result);
+                      setResearchQuery(item.query);
+                    }}>
+                      <strong>{item.query.length > 40 ? item.query.substring(0, 40) + '...' : item.query}</strong>
+                      <span className="history-date">{new Date(item.created_at).toLocaleDateString()}</span>
+                    </div>
+                    <button 
+                      className="history-delete" 
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDeleteResearch(item.id);
+                      }}
+                      title="Delete"
+                    >🗑️</button>
                   </div>
                 ))}
                 {researchHistory.length > 5 && (

@@ -293,7 +293,22 @@ def get_research_history(db = Depends(get_db), username: str = Depends(verify_to
     results = db.query(ResearchResult).filter(
         ResearchResult.user_id == username
     ).order_by(ResearchResult.created_at.desc()).limit(20).all()
-    return {"results": [{"query": r.query, "result": r.result, "created_at": r.created_at.isoformat()} for r in results]}
+    return {"results": [{"id": r.id, "query": r.query, "result": r.result, "created_at": r.created_at.isoformat()} for r in results]}
+
+@app.delete("/api/ai/research/{research_id}", tags=["ai"])
+def delete_research(research_id: int, db = Depends(get_db), username: str = Depends(verify_token)):
+    """Delete a research result"""
+    research = db.query(ResearchResult).filter(
+        ResearchResult.id == research_id,
+        ResearchResult.user_id == username
+    ).first()
+    
+    if not research:
+        raise HTTPException(status_code=404, detail="Research not found")
+    
+    db.delete(research)
+    db.commit()
+    return {"message": "Research deleted"}
 
 # ============ AI Content Generation ============
 
