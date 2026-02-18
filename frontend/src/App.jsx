@@ -216,7 +216,24 @@ function App() {
     // Build prompt with research context if available
     let promptWithContext = aiTopic;
     if (researchContext) {
-      promptWithContext = `Topic: ${aiTopic}\n\nResearch Context:\n${researchContext}\n\nBased on the above research, create a social media post about this topic.`;
+      promptWithContext = `Topic: ${aiTopic}
+
+Research Context:
+${researchContext}
+
+IMPORTANT INSTRUCTIONS:
+- Write as Simply Desserts - do NOT mention competitor names or their pricing
+- Focus on Simply Desserts products, quality, and unique selling points
+- Create an engaging social media post for ${aiPlatform} platform
+- Tone: ${aiTone}
+- Include relevant hashtags but NO competitor mentions`;
+    } else {
+      // No research - just topic
+      promptWithContext = `Create an engaging social media post for Simply Desserts about: ${aiTopic}
+- Platform: ${aiPlatform}
+- Tone: ${aiTone}
+- Write as Simply Desserts brand
+- Include relevant hashtags`;
     }
     
     try {
