@@ -97,8 +97,10 @@ Port 5173 is in use, trying another one...
 12:27:35 PM [vite] hmr update /src/styles.css
 12:31:48 PM [vite] hmr update /src/App.jsx
 12:32:06 PM [vite] hmr update /src/App.jsx
-al-media-dashboard/frontend/node_modules/postcss/lib/parser.js:595:22)
-      at Parser.other (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/postcss/lib/parser.js:437:12)
+12:41:09 PM [vite] hmr update /src/App.jsx
+12:41:24 PM [vite] hmr update /src/App.jsx
+12:41:53 PM [vite] hmr update /src/App.jsx
+shboard/frontend/node_modules/postcss/lib/parser.js:437:12)
       at Parser.parse (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/postcss/lib/parser.js:472:16)
       at parse (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/postcss/lib/parse.js:11:12)
       at new LazyResult (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/postcss/lib/lazy-result.js:165:16)
@@ -650,3 +652,6 @@ al-media-dashboard/frontend/node_modules/postcss/lib/parser.js:595:22)
 12:27:35 PM [vite] hmr update /src/styles.css
 12:31:48 PM [vite] hmr update /src/App.jsx
 12:32:06 PM [vite] hmr update /src/App.jsx
+12:41:09 PM [vite] hmr update /src/App.jsx
+12:41:24 PM [vite] hmr update /src/App.jsx
+12:41:53 PM [vite] hmr update /src/App.jsx

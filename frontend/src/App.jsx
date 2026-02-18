@@ -77,6 +77,8 @@ function App() {
   const [aiContent, setAiContent] = useState('');
   const [aiLoading, setAiLoading] = useState(false);
   const [aiError, setAiError] = useState('');
+  const [aiBrandName, setAiBrandName] = useState(localStorage.getItem('brand_name') || 'Simply Desserts');
+  const [aiExcludeCompetitors, setAiExcludeCompetitors] = useState(true);
   const [researchQuery, setResearchQuery] = useState('');
   const [researchMarket, setResearchMarket] = useState('Global');
   const [researchContext, setResearchContext] = useState(''); // For passing to AI Generate
@@ -215,6 +217,8 @@ function App() {
     
     // Build prompt with research context if available
     let promptWithContext = aiTopic;
+    const competitorInstruction = aiExcludeCompetitors ? `- Do NOT mention competitor names or their pricing` : '';
+    
     if (researchContext) {
       promptWithContext = `Topic: ${aiTopic}
 
@@ -222,18 +226,18 @@ Research Context:
 ${researchContext}
 
 IMPORTANT INSTRUCTIONS:
-- Write as Simply Desserts - do NOT mention competitor names or their pricing
-- Focus on Simply Desserts products, quality, and unique selling points
+- Write as ${aiBrandName} - do NOT mention competitor names or their pricing
+- Focus on ${aiBrandName} products, quality, and unique selling points
 - Create an engaging social media post for ${aiPlatform} platform
 - Tone: ${aiTone}
-- Include relevant hashtags but NO competitor mentions`;
+- Include relevant hashtags ${aiExcludeCompetitors ? '- but NO competitor mentions' : ''}`;
     } else {
       // No research - just topic
-      promptWithContext = `Create an engaging social media post for Simply Desserts about: ${aiTopic}
+      promptWithContext = `Create an engaging social media post for ${aiBrandName} about: ${aiTopic}
 - Platform: ${aiPlatform}
 - Tone: ${aiTone}
-- Write as Simply Desserts brand
-- Include relevant hashtags`;
+- Write as ${aiBrandName} brand
+- Include relevant hashtags ${aiExcludeCompetitors ? '- but NO competitor mentions' : ''}`;
     }
     
     try {
@@ -997,6 +1001,32 @@ IMPORTANT INSTRUCTIONS:
                     <option value="casual">Casual</option>
                     <option value="humorous">Humorous</option>
                   </select>
+                </div>
+              </div>
+              
+              <div className="form-row">
+                <div className="form-group">
+                  <label>Brand Name</label>
+                  <input 
+                    type="text" 
+                    placeholder="Simply Desserts"
+                    value={aiBrandName}
+                    onChange={(e) => {
+                      setAiBrandName(e.target.value);
+                      localStorage.setItem('brand_name', e.target.value);
+                    }}
+                  />
+                </div>
+                
+                <div className="form-group" style={{display: 'flex', alignItems: 'center', marginTop: '1.5rem'}}>
+                  <label style={{display: 'flex', alignItems: 'center', gap: '0.5rem', margin: 0, cursor: 'pointer'}}>
+                    <input 
+                      type="checkbox" 
+                      checked={aiExcludeCompetitors}
+                      onChange={(e) => setAiExcludeCompetitors(e.target.checked)}
+                    />
+                    Exclude competitors
+                  </label>
                 </div>
               </div>
               
