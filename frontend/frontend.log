@@ -30,8 +30,8 @@ Port 5173 is in use, trying another one...
 11:09:54 AM [vite] hmr update /src/App.jsx
 11:10:06 AM [vite] hmr update /src/App.jsx
 11:11:16 AM [vite] hmr update /src/App.jsx
- hmr update /src/App.jsx
-11:40:37 AM [vite] hmr update /src/styles.css
+11:17:08 AM [vite] hmr update /src/App.jsx
+ hmr update /src/styles.css
 11:44:47 AM [vite] hmr update /src/App.jsx
 11:45:50 AM [vite] hmr update /src/styles.css
 11:46:22 AM [vite] hmr update /src/App.jsx
@@ -113,3 +113,4 @@ Port 5173 is in use, trying another one...
 11:09:54 AM [vite] hmr update /src/App.jsx
 11:10:06 AM [vite] hmr update /src/App.jsx
 11:11:16 AM [vite] hmr update /src/App.jsx
+11:17:08 AM [vite] hmr update /src/App.jsx

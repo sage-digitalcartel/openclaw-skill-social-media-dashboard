@@ -769,31 +769,26 @@ function App() {
             </div>
 
             <div className="settings-section">
-              <h3>🔑 Metricool API Keys</h3>
-              {apiKeys.length > 0 ? (
+              <h3>📊 Metricool API</h3>
+              {apiKeys.includes('metricool') ? (
                 <div className="saved-keys" style={{marginBottom: '1rem'}}>
-                  <h4>Saved Keys:</h4>
-                  <div className="keys-list">
-                    {apiKeys.map((name, i) => (
-                      <div key={i} className="key-item">
-                        <span className="key-name">🔑 {name}</span>
-                        <button className="key-delete" onClick={() => handleDeleteApiKey(name)}>🗑️</button>
-                      </div>
-                    ))}
+                  <div className="key-item">
+                    <span className="key-name">📊 Metricool: ••••••••••••</span>
+                    <button className="key-delete" onClick={() => handleDeleteApiKey('metricool')}>🗑️</button>
                   </div>
                 </div>
               ) : (
-                <p className="hint" style={{marginBottom: '1rem'}}>No Metricool keys saved</p>
+                <>
+                  <p className="hint" style={{marginBottom: '1rem'}}>Add your Metricool API key to publish posts</p>
+                  <div className="api-key-form">
+                    <input type="password" placeholder="Metricool API Key" id="metricoolKeyValue" style={{flex: 1}} />
+                    <button onClick={() => {
+                      const key = document.getElementById('metricoolKeyValue').value;
+                      if (key) handleAddApiKey('metricool', key);
+                    }}>Save</button>
+                  </div>
+                </>
               )}
-              <div className="api-key-form">
-                <input type="text" placeholder="Key Name (e.g. main)" id="keyName" />
-                <input type="password" placeholder="Metricool API Key" id="keyValue" />
-                <button onClick={() => {
-                  const name = document.getElementById('keyName').value;
-                  const key = document.getElementById('keyValue').value;
-                  if (name && key) handleAddApiKey(name, key);
-                }}>Add</button>
-              </div>
             </div>
 
             <div className="settings-section">
