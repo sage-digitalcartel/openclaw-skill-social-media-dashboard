@@ -1011,13 +1011,14 @@ IMPORTANT INSTRUCTIONS:
 
                 <div className="form-group">
                   <label># Posts</label>
-                  <select value={aiNumPosts} onChange={(e) => setAiNumPosts(parseInt(e.target.value))}>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                  </select>
+                  <input 
+                    type="number" 
+                    min="1"
+                    max="30"
+                    value={aiNumPosts}
+                    onChange={(e) => setAiNumPosts(parseInt(e.target.value) || 1)}
+                    style={{width: '80px'}}
+                  />
                 </div>
               </div>
               
