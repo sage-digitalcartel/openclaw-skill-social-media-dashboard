@@ -53,10 +53,15 @@ Port 5173 is in use, trying another one...
 11:37:33 AM [vite] hmr update /src/App.jsx
 11:39:02 AM [vite] hmr update /src/App.jsx
 11:45:38 AM [vite] hmr update /src/App.jsx
-/social-media-dashboard/frontend/node_modules/postcss/lib/parser.js:437:12)
-      at Parser.parse (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/postcss/lib/parser.js:472:16)
-      at parse (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/postcss/lib/parse.js:11:12)
-      at new LazyResult (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/postcss/lib/lazy-result.js:165:16)
+11:52:27 AM [vite] hmr update /src/App.jsx
+11:52:59 AM [vite] hmr update /src/App.jsx
+11:53:24 AM [vite] hmr update /src/App.jsx
+11:53:37 AM [vite] hmr update /src/App.jsx
+11:54:14 AM [vite] hmr update /src/App.jsx
+11:54:52 AM [vite] hmr update /src/App.jsx
+11:55:01 AM [vite] hmr update /src/App.jsx
+11:55:32 AM [vite] hmr update /src/App.jsx
+pos/social-media-dashboard/frontend/node_modules/postcss/lib/lazy-result.js:165:16)
       at Processor.process (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/postcss/lib/processor.js:53:14)
       at compileCSS (file:///home/user/GitRepos/social-media-dashboard/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:36898:59)
       at async TransformPluginContext.transform (file:///home/user/GitRepos/social-media-dashboard/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:36171:11)
@@ -140,3 +145,279 @@ Port 5173 is in use, trying another one...
 11:37:33 AM [vite] hmr update /src/App.jsx
 11:39:02 AM [vite] hmr update /src/App.jsx
 11:45:38 AM [vite] hmr update /src/App.jsx
+11:52:27 AM [vite] hmr update /src/App.jsx
+11:52:59 AM [vite] hmr update /src/App.jsx
+11:53:24 AM [vite] hmr update /src/App.jsx
+11:53:37 AM [vite] hmr update /src/App.jsx
+11:54:14 AM [vite] hmr update /src/App.jsx
+11:54:52 AM [vite] hmr update /src/App.jsx
+11:54:52 AM [vite] Internal server error: /home/user/GitRepos/social-media-dashboard/frontend/src/App.jsx: Missing semicolon. (217:28)
+
+  215 |         })
+  216 |       });
+> 217 |       const data = await res if (data.detail.json();
+      |                             ^
+  218 |       
+  219 |      ) {
+  220 |         setAiError(data.detail);
+  Plugin: vite:react-babel
+  File: /home/user/GitRepos/social-media-dashboard/frontend/src/App.jsx:217:28
+  215|          })
+  216|        });
+  217|        const data = await res if (data.detail.json();
+     |                              ^
+  218|        
+  219|       ) {
+      at constructor (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:365:19)
+      at JSXParserMixin.raise (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:6599:19)
+      at JSXParserMixin.semicolon (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:6895:10)
+      at JSXParserMixin.parseVarStatement (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:13231:10)
+      at JSXParserMixin.parseStatementContent (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:12851:23)
+      at JSXParserMixin.parseStatementLike (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:12767:17)
+      at JSXParserMixin.parseStatementListItem (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:12747:17)
+      at JSXParserMixin.parseBlockOrModuleBlockBody (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:13316:61)
+      at JSXParserMixin.parseBlockBody (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:13309:10)
+      at JSXParserMixin.parseBlock (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:13297:10)
+      at JSXParserMixin.parseTryStatement (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:13205:23)
+      at JSXParserMixin.parseStatementContent (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:12804:21)
+      at JSXParserMixin.parseStatementLike (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:12767:17)
+      at JSXParserMixin.parseStatementListItem (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:12747:17)
+      at JSXParserMixin.parseBlockOrModuleBlockBody (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:13316:61)
+      at JSXParserMixin.parseBlockBody (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:13309:10)
+      at JSXParserMixin.parseBlock (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:13297:10)
+      at JSXParserMixin.parseFunctionBody (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:12100:24)
+      at JSXParserMixin.parseArrowExpression (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:12075:10)
+      at JSXParserMixin.parseAsyncArrowFromCallExpression (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:11264:10)
+      at JSXParserMixin.parseCoverCallAndAsyncArrowHead (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:11194:27)
+      at JSXParserMixin.parseSubscript (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:11120:19)
+      at JSXParserMixin.parseSubscripts (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:11094:19)
+      at JSXParserMixin.parseExprSubscripts (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:11085:17)
+      at JSXParserMixin.parseUpdate (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:11066:21)
+      at JSXParserMixin.parseMaybeUnary (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:11046:23)
+      at JSXParserMixin.parseMaybeUnaryOrPrivate (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:10899:61)
+      at JSXParserMixin.parseExprOps (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:10904:23)
+      at JSXParserMixin.parseMaybeConditional (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:10881:23)
+      at JSXParserMixin.parseMaybeAssign (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:10831:21)
+      at /home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:10800:39
+      at JSXParserMixin.allowInAnd (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:12421:16)
+      at JSXParserMixin.parseMaybeAssignAllowIn (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:10800:17)
+      at JSXParserMixin.parseVar (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:13384:91)
+      at JSXParserMixin.parseVarStatement (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:13230:10)
+      at JSXParserMixin.parseStatementContent (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:12851:23)
+      at JSXParserMixin.parseStatementLike (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:12767:17)
+      at JSXParserMixin.parseStatementListItem (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:12747:17)
+      at JSXParserMixin.parseBlockOrModuleBlockBody (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:13316:61)
+      at JSXParserMixin.parseBlockBody (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:13309:10)
+      at JSXParserMixin.parseBlock (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:13297:10)
+      at JSXParserMixin.parseFunctionBody (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:12100:24)
+      at JSXParserMixin.parseFunctionBodyAndFinish (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:12086:10)
+      at /home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:13445:12
+      at JSXParserMixin.withSmartMixTopicForbiddingContext (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:12403:14)
+      at JSXParserMixin.parseFunction (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:13444:10)
+      at JSXParserMixin.parseFunctionStatement (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:13125:17)
+      at JSXParserMixin.parseStatementContent (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:12791:21)
+      at JSXParserMixin.parseStatementLike (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:12767:17)
+      at JSXParserMixin.parseModuleItem (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:12744:17)
+11:54:52 AM [vite] Internal server error: /home/user/GitRepos/social-media-dashboard/frontend/src/App.jsx: Missing semicolon. (217:28)
+
+  215 |         })
+  216 |       });
+> 217 |       const data = await res if (data.detail.json();
+      |                             ^
+  218 |       
+  219 |      ) {
+  220 |         setAiError(data.detail);
+  Plugin: vite:react-babel
+  File: /home/user/GitRepos/social-media-dashboard/frontend/src/App.jsx:217:28
+  215|          })
+  216|        });
+  217|        const data = await res if (data.detail.json();
+     |                              ^
+  218|        
+  219|       ) {
+      at constructor (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:365:19)
+      at JSXParserMixin.raise (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:6599:19)
+      at JSXParserMixin.semicolon (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:6895:10)
+      at JSXParserMixin.parseVarStatement (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:13231:10)
+      at JSXParserMixin.parseStatementContent (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:12851:23)
+      at JSXParserMixin.parseStatementLike (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:12767:17)
+      at JSXParserMixin.parseStatementListItem (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:12747:17)
+      at JSXParserMixin.parseBlockOrModuleBlockBody (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:13316:61)
+      at JSXParserMixin.parseBlockBody (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:13309:10)
+      at JSXParserMixin.parseBlock (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:13297:10)
+      at JSXParserMixin.parseTryStatement (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:13205:23)
+      at JSXParserMixin.parseStatementContent (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:12804:21)
+      at JSXParserMixin.parseStatementLike (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:12767:17)
+      at JSXParserMixin.parseStatementListItem (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:12747:17)
+      at JSXParserMixin.parseBlockOrModuleBlockBody (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:13316:61)
+      at JSXParserMixin.parseBlockBody (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:13309:10)
+      at JSXParserMixin.parseBlock (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:13297:10)
+      at JSXParserMixin.parseFunctionBody (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:12100:24)
+      at JSXParserMixin.parseArrowExpression (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:12075:10)
+      at JSXParserMixin.parseAsyncArrowFromCallExpression (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:11264:10)
+      at JSXParserMixin.parseCoverCallAndAsyncArrowHead (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:11194:27)
+      at JSXParserMixin.parseSubscript (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:11120:19)
+      at JSXParserMixin.parseSubscripts (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:11094:19)
+      at JSXParserMixin.parseExprSubscripts (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:11085:17)
+      at JSXParserMixin.parseUpdate (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:11066:21)
+      at JSXParserMixin.parseMaybeUnary (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:11046:23)
+      at JSXParserMixin.parseMaybeUnaryOrPrivate (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:10899:61)
+      at JSXParserMixin.parseExprOps (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:10904:23)
+      at JSXParserMixin.parseMaybeConditional (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:10881:23)
+      at JSXParserMixin.parseMaybeAssign (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:10831:21)
+      at /home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:10800:39
+      at JSXParserMixin.allowInAnd (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:12421:16)
+      at JSXParserMixin.parseMaybeAssignAllowIn (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:10800:17)
+      at JSXParserMixin.parseVar (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:13384:91)
+      at JSXParserMixin.parseVarStatement (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:13230:10)
+      at JSXParserMixin.parseStatementContent (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:12851:23)
+      at JSXParserMixin.parseStatementLike (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:12767:17)
+      at JSXParserMixin.parseStatementListItem (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:12747:17)
+      at JSXParserMixin.parseBlockOrModuleBlockBody (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:13316:61)
+      at JSXParserMixin.parseBlockBody (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:13309:10)
+      at JSXParserMixin.parseBlock (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:13297:10)
+      at JSXParserMixin.parseFunctionBody (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:12100:24)
+      at JSXParserMixin.parseFunctionBodyAndFinish (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:12086:10)
+      at /home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:13445:12
+      at JSXParserMixin.withSmartMixTopicForbiddingContext (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:12403:14)
+      at JSXParserMixin.parseFunction (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:13444:10)
+      at JSXParserMixin.parseFunctionStatement (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:13125:17)
+      at JSXParserMixin.parseStatementContent (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:12791:21)
+      at JSXParserMixin.parseStatementLike (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:12767:17)
+      at JSXParserMixin.parseModuleItem (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:12744:17)
+11:55:01 AM [vite] hmr update /src/App.jsx
+11:55:01 AM [vite] Internal server error: /home/user/GitRepos/social-media-dashboard/frontend/src/App.jsx: Unexpected token (219:5)
+
+  217 |       const data = await res.json();
+  218 |       
+> 219 |      ) {
+      |      ^
+  220 |         setAiError(data.detail);
+  221 |       } else if (data.content) {
+  222 |         setAiContent(data.content);
+  Plugin: vite:react-babel
+  File: /home/user/GitRepos/social-media-dashboard/frontend/src/App.jsx:219:5
+  217|        const data = await res.json();
+  218|        
+  219|       ) {
+     |       ^
+  220|          setAiError(data.detail);
+  221|        } else if (data.content) {
+      at constructor (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:365:19)
+      at JSXParserMixin.raise (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:6599:19)
+      at JSXParserMixin.unexpected (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:6619:16)
+      at JSXParserMixin.parseExprAtom (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:11442:22)
+      at JSXParserMixin.parseExprAtom (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:4764:20)
+      at JSXParserMixin.parseExprSubscripts (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:11081:23)
+      at JSXParserMixin.parseUpdate (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:11066:21)
+      at JSXParserMixin.parseMaybeUnary (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:11046:23)
+      at JSXParserMixin.parseMaybeUnaryOrPrivate (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:10899:61)
+      at JSXParserMixin.parseExprOps (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:10904:23)
+      at JSXParserMixin.parseMaybeConditional (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:10881:23)
+      at JSXParserMixin.parseMaybeAssign (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:10831:21)
+      at JSXParserMixin.parseExpressionBase (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:10784:23)
+      at /home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:10780:39
+      at JSXParserMixin.allowInAnd (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:12421:16)
+      at JSXParserMixin.parseExpression (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:10780:17)
+      at JSXParserMixin.parseStatementContent (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:12895:23)
+      at JSXParserMixin.parseStatementLike (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:12767:17)
+      at JSXParserMixin.parseStatementListItem (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:12747:17)
+      at JSXParserMixin.parseBlockOrModuleBlockBody (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:13316:61)
+      at JSXParserMixin.parseBlockBody (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:13309:10)
+      at JSXParserMixin.parseBlock (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:13297:10)
+      at JSXParserMixin.parseTryStatement (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:13205:23)
+      at JSXParserMixin.parseStatementContent (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:12804:21)
+      at JSXParserMixin.parseStatementLike (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:12767:17)
+      at JSXParserMixin.parseStatementListItem (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:12747:17)
+      at JSXParserMixin.parseBlockOrModuleBlockBody (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:13316:61)
+      at JSXParserMixin.parseBlockBody (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:13309:10)
+      at JSXParserMixin.parseBlock (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:13297:10)
+      at JSXParserMixin.parseFunctionBody (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:12100:24)
+      at JSXParserMixin.parseArrowExpression (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:12075:10)
+      at JSXParserMixin.parseAsyncArrowFromCallExpression (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:11264:10)
+      at JSXParserMixin.parseCoverCallAndAsyncArrowHead (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:11194:27)
+      at JSXParserMixin.parseSubscript (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:11120:19)
+      at JSXParserMixin.parseSubscripts (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:11094:19)
+      at JSXParserMixin.parseExprSubscripts (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:11085:17)
+      at JSXParserMixin.parseUpdate (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:11066:21)
+      at JSXParserMixin.parseMaybeUnary (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:11046:23)
+      at JSXParserMixin.parseMaybeUnaryOrPrivate (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:10899:61)
+      at JSXParserMixin.parseExprOps (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:10904:23)
+      at JSXParserMixin.parseMaybeConditional (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:10881:23)
+      at JSXParserMixin.parseMaybeAssign (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:10831:21)
+      at /home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:10800:39
+      at JSXParserMixin.allowInAnd (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:12421:16)
+      at JSXParserMixin.parseMaybeAssignAllowIn (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:10800:17)
+      at JSXParserMixin.parseVar (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:13384:91)
+      at JSXParserMixin.parseVarStatement (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:13230:10)
+      at JSXParserMixin.parseStatementContent (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:12851:23)
+      at JSXParserMixin.parseStatementLike (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:12767:17)
+      at JSXParserMixin.parseStatementListItem (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:12747:17)
+11:55:02 AM [vite] Internal server error: /home/user/GitRepos/social-media-dashboard/frontend/src/App.jsx: Unexpected token (219:5)
+
+  217 |       const data = await res.json();
+  218 |       
+> 219 |      ) {
+      |      ^
+  220 |         setAiError(data.detail);
+  221 |       } else if (data.content) {
+  222 |         setAiContent(data.content);
+  Plugin: vite:react-babel
+  File: /home/user/GitRepos/social-media-dashboard/frontend/src/App.jsx:219:5
+  217|        const data = await res.json();
+  218|        
+  219|       ) {
+     |       ^
+  220|          setAiError(data.detail);
+  221|        } else if (data.content) {
+      at constructor (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:365:19)
+      at JSXParserMixin.raise (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:6599:19)
+      at JSXParserMixin.unexpected (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:6619:16)
+      at JSXParserMixin.parseExprAtom (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:11442:22)
+      at JSXParserMixin.parseExprAtom (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:4764:20)
+      at JSXParserMixin.parseExprSubscripts (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:11081:23)
+      at JSXParserMixin.parseUpdate (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:11066:21)
+      at JSXParserMixin.parseMaybeUnary (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:11046:23)
+      at JSXParserMixin.parseMaybeUnaryOrPrivate (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:10899:61)
+      at JSXParserMixin.parseExprOps (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:10904:23)
+      at JSXParserMixin.parseMaybeConditional (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:10881:23)
+      at JSXParserMixin.parseMaybeAssign (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:10831:21)
+      at JSXParserMixin.parseExpressionBase (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:10784:23)
+      at /home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:10780:39
+      at JSXParserMixin.allowInAnd (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:12421:16)
+      at JSXParserMixin.parseExpression (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:10780:17)
+      at JSXParserMixin.parseStatementContent (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:12895:23)
+      at JSXParserMixin.parseStatementLike (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:12767:17)
+      at JSXParserMixin.parseStatementListItem (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:12747:17)
+      at JSXParserMixin.parseBlockOrModuleBlockBody (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:13316:61)
+      at JSXParserMixin.parseBlockBody (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:13309:10)
+      at JSXParserMixin.parseBlock (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:13297:10)
+      at JSXParserMixin.parseTryStatement (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:13205:23)
+      at JSXParserMixin.parseStatementContent (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:12804:21)
+      at JSXParserMixin.parseStatementLike (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:12767:17)
+      at JSXParserMixin.parseStatementListItem (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:12747:17)
+      at JSXParserMixin.parseBlockOrModuleBlockBody (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:13316:61)
+      at JSXParserMixin.parseBlockBody (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:13309:10)
+      at JSXParserMixin.parseBlock (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:13297:10)
+      at JSXParserMixin.parseFunctionBody (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:12100:24)
+      at JSXParserMixin.parseArrowExpression (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:12075:10)
+      at JSXParserMixin.parseAsyncArrowFromCallExpression (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:11264:10)
+      at JSXParserMixin.parseCoverCallAndAsyncArrowHead (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:11194:27)
+      at JSXParserMixin.parseSubscript (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:11120:19)
+      at JSXParserMixin.parseSubscripts (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:11094:19)
+      at JSXParserMixin.parseExprSubscripts (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:11085:17)
+      at JSXParserMixin.parseUpdate (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:11066:21)
+      at JSXParserMixin.parseMaybeUnary (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:11046:23)
+      at JSXParserMixin.parseMaybeUnaryOrPrivate (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:10899:61)
+      at JSXParserMixin.parseExprOps (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:10904:23)
+      at JSXParserMixin.parseMaybeConditional (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:10881:23)
+      at JSXParserMixin.parseMaybeAssign (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:10831:21)
+      at /home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:10800:39
+      at JSXParserMixin.allowInAnd (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:12421:16)
+      at JSXParserMixin.parseMaybeAssignAllowIn (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:10800:17)
+      at JSXParserMixin.parseVar (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:13384:91)
+      at JSXParserMixin.parseVarStatement (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:13230:10)
+      at JSXParserMixin.parseStatementContent (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:12851:23)
+      at JSXParserMixin.parseStatementLike (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:12767:17)
+      at JSXParserMixin.parseStatementListItem (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/@babel/parser/lib/index.js:12747:17)
+11:55:32 AM [vite] hmr update /src/App.jsx

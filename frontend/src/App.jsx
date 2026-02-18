@@ -78,6 +78,8 @@ function App() {
   const [aiLoading, setAiLoading] = useState(false);
   const [aiError, setAiError] = useState('');
   const [researchQuery, setResearchQuery] = useState('');
+  const [researchMarket, setResearchMarket] = useState('Global');
+  const [researchContext, setResearchContext] = useState(''); // For passing to AI Generate
   const [researchResult, setResearchResult] = useState('');
   const [researchLoading, setResearchLoading] = useState(false);
   const [researchHistory, setResearchHistory] = useState([]);
@@ -196,11 +198,21 @@ function App() {
     setAiError('');
     setAiContent('');
     
+    // Build prompt with research context if available
+    let promptWithContext = aiTopic;
+    if (researchContext) {
+      promptWithContext = `Topic: ${aiTopic}\n\nResearch Context:\n${researchContext}\n\nBased on the above research, create a social media post about this topic.`;
+    }
+    
     try {
       const res = await fetch(`${API_BASE}/api/ai/generate`, {
         method: 'POST',
         headers: { ...authHeader(), 'Content-Type': 'application/json' },
-        body: JSON.stringify({ topic: aiTopic, platform: aiPlatform, tone: aiTone })
+        body: JSON.stringify({ 
+          topic: promptWithContext, 
+          platform: aiPlatform, 
+          tone: aiTone 
+        })
       });
       const data = await res.json();
       
@@ -208,6 +220,8 @@ function App() {
         setAiError(data.detail);
       } else if (data.content) {
         setAiContent(data.content);
+        // Clear research context after using it
+        setResearchContext('');
       } else {
         setAiError('No content generated');
       }
@@ -225,11 +239,16 @@ function App() {
     }
     setResearchLoading(true);
     
+    // Build query with market context
+    const fullQuery = researchMarket !== 'Global' 
+      ? `${researchQuery} - Focus on ${researchMarket} market trends and insights`
+      : researchQuery;
+    
     try {
       const res = await fetch(`${API_BASE}/api/ai/research`, {
         method: 'POST',
         headers: { ...authHeader(), 'Content-Type': 'application/json' },
-        body: JSON.stringify({ query: researchQuery })
+        body: JSON.stringify({ query: fullQuery })
       });
       const data = await res.json();
       
@@ -239,6 +258,7 @@ function App() {
         const historyRes = await fetch(`${API_BASE}/api/ai/research`, { headers: authHeader() });
         const historyData = await historyRes.json();
         setResearchHistory(historyData.results || []);
+        showNotification('Research saved!');
       } else if (data.detail) {
         showNotification(data.detail, 'error');
       }
@@ -247,6 +267,17 @@ function App() {
     } finally {
       setResearchLoading(false);
     }
+  };
+
+  // Use research result to generate content
+  const handleUseForContent = () => {
+    if (!researchResult) return;
+    
+    // Store research context and switch to AI Generate view
+    setResearchContext(researchResult);
+    setAiTopic(researchQuery + (researchMarket !== 'Global' ? ` (${researchMarket} market)` : ''));
+    setView('ai-generate');
+    showNotification('Research loaded into AI Generate. Add context prompt and generate!');
   };
 
   const handleSaveAISettings = async () => {
@@ -930,10 +961,25 @@ function App() {
                 <label>Research Query</label>
                 <input 
                   type="text" 
-                  placeholder="e.g. Latest trends in sustainable food packaging..."
+                  placeholder="e.g. Protein Pudding trends..."
                   value={researchQuery}
                   onChange={(e) => setResearchQuery(e.target.value)}
                 />
+              </div>
+              
+              <div className="form-group">
+                <label>Market</label>
+                <select 
+                  value={researchMarket}
+                  onChange={(e) => setResearchMarket(e.target.value)}
+                >
+                  <option value="Global">Global</option>
+                  <option value="USA">USA</option>
+                  <option value="UK">UK</option>
+                  <option value="South Africa">South Africa</option>
+                  <option value="Europe">Europe</option>
+                  <option value="Australia">Australia</option>
+                </select>
               </div>
               
               <button 
@@ -948,6 +994,13 @@ function App() {
                 <div className="research-result">
                   <h3>Results:</h3>
                   <div className="content-box">{researchResult}</div>
+                  <button 
+                    className="btn-primary" 
+                    onClick={handleUseForContent}
+                    style={{marginTop: '1rem'}}
+                  >
+                    ✨ Generate Content from Research
+                  </button>
                 </div>
               )}
             </div>
@@ -956,7 +1009,10 @@ function App() {
               <div className="research-history">
                 <h3>Recent Research</h3>
                 {researchHistory.map((item, i) => (
-                  <div key={i} className="history-item" onClick={() => setResearchResult(item.result)}>
+                  <div key={i} className="history-item" onClick={() => {
+                    setResearchResult(item.result);
+                    setResearchQuery(item.query);
+                  }}>
                     <strong>{item.query}</strong>
                     <span>{new Date(item.created_at).toLocaleDateString()}</span>
                   </div>
