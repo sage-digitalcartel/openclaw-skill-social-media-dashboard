@@ -97,6 +97,13 @@ function App() {
       setIsAuthenticated(true);
       fetchPosts();
       fetchApiKeys();
+      
+      // Auto-fetch workspaces if Metricool key saved
+      const savedMetricoolKey = localStorage.getItem('metricool_key');
+      if (savedMetricoolKey) {
+        fetchWorkspaces();
+      }
+      
       // Load saved workspace
       const savedWorkspace = localStorage.getItem('metricool_workspace');
       if (savedWorkspace) {
@@ -317,6 +324,11 @@ function App() {
         localStorage.setItem('metricool_key', key);
         fetchApiKeys();
         showNotification('API Key saved successfully!');
+        
+        // Auto-fetch workspaces for Metricool
+        if (name === 'metricool') {
+          fetchWorkspaces();
+        }
       } else {
         showNotification('Failed to save API key', 'error');
       }
@@ -826,23 +838,6 @@ function App() {
                   const apiKey = localStorage.getItem('metricool_key');
                   if (apiKey) fetchWorkspaces();
                 }}>Refresh</button>
-              </div>
-
-              <p className="hint" style={{marginTop: '1rem'}}>Or enter workspace ID manually:</p>
-              <div className="workspace-select">
-                <input 
-                  type="text" 
-                  placeholder="e.g. 5704319"
-                  value={selectedWorkspace}
-                  onChange={(e) => {
-                    setSelectedWorkspace(e.target.value);
-                    localStorage.setItem('metricool_workspace', e.target.value);
-                  }}
-                  style={{flex: 1}}
-                />
-                <button onClick={() => {
-                  if (selectedWorkspace) fetchChannels(selectedWorkspace);
-                }}>Load Channels</button>
               </div>
 
               {channels.length > 0 && (
