@@ -134,7 +134,7 @@ function App() {
     if (!token) return;
     const apiKey = localStorage.getItem('metricool_key');
     if (!apiKey) {
-      showNotification('Please add your Metricool API key first', 'error');
+      // No API key yet - don't show error, just skip silently
       return;
     }
     try {
@@ -145,11 +145,10 @@ function App() {
       if (data.data?.length === 0) {
         showNotification('No channels found. Check your userId/blogId.', 'error');
       } else if (data._mock) {
-        showNotification('Using mock channels (API unreachable)', 'error');
+        console.log('Using mock channels (API unreachable)');
       }
     } catch (e) {
       console.error('Failed to fetch channels:', e);
-      showNotification('Failed to fetch channels', 'error');
     }
   };
 
