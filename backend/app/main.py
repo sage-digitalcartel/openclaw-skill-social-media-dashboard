@@ -265,7 +265,7 @@ def ai_research(request: AIResearchRequest, db = Depends(get_db), username: str 
                     {"role": "user", "content": f"Research and provide key information about: {request.query}"}
                 ]
             },
-            timeout=30
+            timeout=60
         )
         
         if response.status_code == 200:
@@ -336,7 +336,7 @@ Include relevant hashtags. Make it engaging but not salesy.
                     {"role": "user", "content": prompt}
                 ]
             },
-            timeout=30
+            timeout=60
         )
         
         if response.status_code == 200:
