@@ -770,6 +770,21 @@ function App() {
 
             <div className="settings-section">
               <h3>🔑 Metricool API Keys</h3>
+              {apiKeys.length > 0 ? (
+                <div className="saved-keys" style={{marginBottom: '1rem'}}>
+                  <h4>Saved Keys:</h4>
+                  <div className="keys-list">
+                    {apiKeys.map((name, i) => (
+                      <div key={i} className="key-item">
+                        <span className="key-name">🔑 {name}</span>
+                        <button className="key-delete" onClick={() => handleDeleteApiKey(name)}>🗑️</button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <p className="hint" style={{marginBottom: '1rem'}}>No Metricool keys saved</p>
+              )}
               <div className="api-key-form">
                 <input type="text" placeholder="Key Name (e.g. main)" id="keyName" />
                 <input type="password" placeholder="Metricool API Key" id="keyValue" />
@@ -779,20 +794,6 @@ function App() {
                   if (name && key) handleAddApiKey(name, key);
                 }}>Add</button>
               </div>
-              
-              {apiKeys.length > 0 && (
-                <div className="saved-keys">
-                  <h4>Saved Keys:</h4>
-                  <div className="keys-list">
-                    {apiKeys.map((name, i) => (
-                      <div key={i} className="key-item">
-                        <span className="key-name">{name}</span>
-                        <button className="key-delete" onClick={() => handleDeleteApiKey(name)}>🗑️</button>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
             </div>
 
             <div className="settings-section">
