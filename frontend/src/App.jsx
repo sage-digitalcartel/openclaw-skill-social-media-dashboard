@@ -1040,6 +1040,7 @@ IMPORTANT INSTRUCTIONS:
                 className="btn-primary" 
                 onClick={handleAIGenerate}
                 disabled={aiLoading}
+                style={{marginTop: '1.5rem'}}
               >
                 {aiLoading ? '⏳ Generating...' : '✨ Generate Content'}
               </button>

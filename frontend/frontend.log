@@ -110,7 +110,8 @@ Port 5173 is in use, trying another one...
 12:52:13 PM [vite] hmr update /src/App.jsx
 12:52:19 PM [vite] hmr update /src/App.jsx
 12:52:59 PM [vite] hmr update /src/App.jsx
-.process (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/postcss/lib/processor.js:53:14)
+12:53:41 PM [vite] hmr update /src/App.jsx
+dashboard/frontend/node_modules/postcss/lib/processor.js:53:14)
       at compileCSS (file:///home/user/GitRepos/social-media-dashboard/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:36898:59)
       at async TransformPluginContext.transform (file:///home/user/GitRepos/social-media-dashboard/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:36171:11)
       at async PluginContainer.transform (file:///home/user/GitRepos/social-media-dashboard/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49099:18)
@@ -939,3 +940,4 @@ Port 5173 is in use, trying another one...
 12:52:13 PM [vite] hmr update /src/App.jsx
 12:52:19 PM [vite] hmr update /src/App.jsx
 12:52:59 PM [vite] hmr update /src/App.jsx
+12:53:41 PM [vite] hmr update /src/App.jsx
