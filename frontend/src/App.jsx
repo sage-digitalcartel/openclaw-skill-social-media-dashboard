@@ -1004,8 +1004,8 @@ IMPORTANT INSTRUCTIONS:
                 </div>
               </div>
               
-              <div className="form-row">
-                <div className="form-group">
+              <div className="form-row" style={{alignItems: 'center'}}>
+                <div className="form-group" style={{marginBottom: 0, flex: 1}}>
                   <label>Brand Name</label>
                   <input 
                     type="text" 
@@ -1018,8 +1018,8 @@ IMPORTANT INSTRUCTIONS:
                   />
                 </div>
                 
-                <div className="form-group" style={{display: 'flex', alignItems: 'center', marginTop: '1.5rem'}}>
-                  <label style={{display: 'flex', alignItems: 'center', gap: '0.5rem', margin: 0, cursor: 'pointer'}}>
+                <div className="form-group" style={{marginBottom: 0, display: 'flex', alignItems: 'flex-end', paddingBottom: '0.5rem'}}>
+                  <label style={{display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', whiteSpace: 'nowrap'}}>
                     <input 
                       type="checkbox" 
                       checked={aiExcludeCompetitors}
