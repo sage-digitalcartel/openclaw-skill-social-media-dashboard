@@ -1154,7 +1154,7 @@ IMPORTANT INSTRUCTIONS:
                   <input 
                     type="number" 
                     min="1"
-                    max="30"
+                    max="10"
                     value={aiNumPosts}
                     onChange={(e) => setAiNumPosts(parseInt(e.target.value) || 1)}
                     style={{width: '80px'}}
