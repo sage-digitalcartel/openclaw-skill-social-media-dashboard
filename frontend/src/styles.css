@@ -660,6 +660,7 @@ body {
   color: var(--gray);
   font-size: 0.9rem;
   font-style: italic;
+  margin-bottom: 15px;
 }
 
 /* Posts */
@@ -949,16 +950,21 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: var(--light);
+  background: #faedcd;
   border-radius: 8px;
-  margin-bottom: 0.75rem;
+  margin-bottom: 15px;
   padding: 0.75rem 1rem;
   cursor: pointer;
   transition: all 0.2s;
 }
 
 .history-item:hover {
-  background: var(--secondary);
+  background: #bc8a5f;
+}
+
+.history-item:hover strong,
+.history-item:hover .history-date {
+  color: white;
 }
 
 .history-item-content {
@@ -986,7 +992,7 @@ body {
 
 .history-item strong {
   font-size: 0.9rem;
-  color: var(--dark);
+  color: inherit;
 }
 
 .history-date {

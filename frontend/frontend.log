@@ -92,9 +92,10 @@ Port 5173 is in use, trying another one...
 12:22:42 PM [vite] hmr update /src/styles.css
 12:23:12 PM [vite] hmr update /src/styles.css
 12:23:45 PM [vite] hmr update /src/App.jsx
-font-size: 12px: 1rem;
-  87 |    transition: all 0.2s;
-      at Input.error (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/postcss/lib/input.js:135:16)
+12:26:49 PM [vite] hmr update /src/styles.css
+12:27:06 PM [vite] hmr update /src/styles.css
+12:27:35 PM [vite] hmr update /src/styles.css
+les/postcss/lib/input.js:135:16)
       at Parser.unknownWord (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/postcss/lib/parser.js:595:22)
       at Parser.other (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/postcss/lib/parser.js:437:12)
       at Parser.parse (/home/user/GitRepos/social-media-dashboard/frontend/node_modules/postcss/lib/parser.js:472:16)
@@ -643,3 +644,6 @@ font-size: 12px: 1rem;
       at async viteTransformMiddleware (file:///home/user/GitRepos/social-media-dashboard/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:62106:24)
 12:23:12 PM [vite] hmr update /src/styles.css
 12:23:45 PM [vite] hmr update /src/App.jsx
+12:26:49 PM [vite] hmr update /src/styles.css
+12:27:06 PM [vite] hmr update /src/styles.css
+12:27:35 PM [vite] hmr update /src/styles.css
