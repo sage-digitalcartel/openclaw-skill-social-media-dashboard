@@ -83,6 +83,13 @@ function App() {
   const [researchHistory, setResearchHistory] = useState([]);
   const [aiApiKey, setAiApiKey] = useState('');
   const [savedMinimaxKey, setSavedMinimaxKey] = useState('');
+  const [notification, setNotification] = useState({ message: '', type: '' });
+
+  // Show inline notification
+  const showNotification = (message, type = 'success') => {
+    setNotification({ message, type });
+    setTimeout(() => setNotification({ message: '', type: '' }), 4000);
+  };
 
   // Check for existing token on load
   useEffect(() => {
@@ -127,7 +134,7 @@ function App() {
     if (!token) return;
     const apiKey = localStorage.getItem('metricool_key');
     if (!apiKey) {
-      alert('Please add your Metricool API key first');
+      showNotification('Please add your Metricool API key first', 'error');
       return;
     }
     try {
@@ -135,7 +142,7 @@ function App() {
       const data = await res.json();
       setWorkspaces(data.workspaces || []);
       if (data.workspaces?.length === 0) {
-        alert('No workspaces found. Check your API key.');
+        showNotification('No workspaces found. Check your API key.', 'error');
       }
     } catch (e) {
       console.error('Failed to fetch workspaces:', e);
@@ -172,10 +179,10 @@ function App() {
           fetchPosts();
           fetchApiKeys();
         } else {
-          alert('Invalid credentials');
+          showNotification('Invalid credentials', 'error');
         }
       })
-      .catch(() => alert('Login failed'));
+      .catch(() => showNotification('Login failed', 'error'));
   };
 
   const handleLogout = () => {
@@ -220,7 +227,7 @@ function App() {
 
   const handleAIResearch = async () => {
     if (!researchQuery.trim()) {
-      alert('Please enter a research query');
+      showNotification('Please enter a research query', 'error');
       return;
     }
     setResearchLoading(true);
@@ -240,10 +247,10 @@ function App() {
         const historyData = await historyRes.json();
         setResearchHistory(historyData.results || []);
       } else if (data.detail) {
-        alert(data.detail);
+        showNotification(data.detail, 'error');
       }
     } catch (e) {
-      alert('Research failed: ' + e.message);
+      showNotification('Research failed: ' + e.message, 'error');
     } finally {
       setResearchLoading(false);
     }
@@ -251,7 +258,7 @@ function App() {
 
   const handleSaveAISettings = async () => {
     if (!aiApiKey.trim()) {
-      alert('Please enter your MiniMax API key');
+      showNotification('Please enter your MiniMax API key', 'error');
       return;
     }
     try {
@@ -261,13 +268,13 @@ function App() {
         body: JSON.stringify({ provider: 'minimax', api_key: aiApiKey })
       });
       if (res.ok) {
-        alert('AI Settings saved! You can now generate content.');
+        showNotification('AI Settings saved! You can now generate content.');
         localStorage.setItem('minimax_key', aiApiKey);
       } else {
-        alert('Failed to save settings');
+        showNotification('Failed to save settings', 'error');
       }
     } catch (e) {
-      alert('Failed to save: ' + e.message);
+      showNotification('Failed to save: ' + e.message, 'error');
     }
   };
 
@@ -309,13 +316,13 @@ function App() {
       if (res.ok) {
         localStorage.setItem('metricool_key', key);
         fetchApiKeys();
-        alert('API Key saved successfully!');
+        showNotification('API Key saved successfully!');
       } else {
-        alert('Failed to save API key');
+        showNotification('Failed to save API key', 'error');
       }
     } catch (e) {
       console.error('Failed to add API key:', e);
-      alert('Failed to save API key');
+      showNotification('Failed to save API key', 'error');
     }
   };
 
@@ -334,11 +341,11 @@ function App() {
 
   const handleCreatePost = async () => {
     if (!newPost.content) {
-      alert('Please enter post content');
+      showNotification('Please enter post content', 'error');
       return;
     }
     if (!newPost.platforms || newPost.platforms.length === 0) {
-      alert('Please select at least one platform');
+      showNotification('Please select at least one platform', 'error');
       return;
     }
     try {
@@ -398,14 +405,14 @@ function App() {
   const handlePublish = async (postId, force = false) => {
     const apiKey = localStorage.getItem('metricool_key');
     if (!apiKey) {
-      alert('Please add your Metricool API key in Settings');
+      showNotification('Please add your Metricool API key in Settings', 'error');
       return;
     }
     
     // Find the post
     const post = posts.find(p => p.id === postId);
     if (!post) {
-      alert('Post not found');
+      showNotification('Post not found', 'error');
       return;
     }
     
@@ -456,14 +463,14 @@ function App() {
       });
       
       if (resultData._mock || resultData.error) {
-        alert('Post published (mock mode)');
+        showNotification('Post published (mock mode)');
       } else {
-        alert('Post published to Metricool! 🎉');
+        showNotification('Post published to Metricool! 🎉');
       }
       fetchPosts();
     } catch (e) {
       console.error('Failed to publish:', e);
-      alert('Failed to publish: ' + e.message);
+      showNotification('Failed to publish: ' + e.message, 'error');
     }
   };
 
@@ -524,6 +531,12 @@ function App() {
           </button>
         </div>
       </header>
+
+      {notification.message && (
+        <div className={`notification ${notification.type}`}>
+          {notification.message}
+        </div>
+      )}
 
       <nav className="nav">
         <button className={view === 'dashboard' ? 'active' : ''} onClick={() => setView('dashboard')}>📊 Dashboard</button>
@@ -744,9 +757,9 @@ function App() {
                         setSavedMinimaxKey('');
                         setAiApiKey('');
                         localStorage.removeItem('minimax_key');
-                        alert('MiniMax API key removed');
+                        showNotification('MiniMax API key removed');
                       } catch (e) {
-                        alert('Failed to remove key');
+                        showNotification('Failed to remove key', 'error');
                       }
                     }}>🗑️</button>
                   </div>

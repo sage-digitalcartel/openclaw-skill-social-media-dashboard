@@ -31,13 +31,15 @@ Port 5173 is in use, trying another one...
 11:10:06 AM [vite] hmr update /src/App.jsx
 11:11:16 AM [vite] hmr update /src/App.jsx
 11:17:08 AM [vite] hmr update /src/App.jsx
- hmr update /src/styles.css
-11:44:47 AM [vite] hmr update /src/App.jsx
-11:45:50 AM [vite] hmr update /src/styles.css
-11:46:22 AM [vite] hmr update /src/App.jsx
-11:46:30 AM [vite] hmr update /src/styles.css
-11:47:07 AM [vite] hmr update /src/styles.css
-11:47:07 AM [vite] Internal server error: [postcss] /home/user/GitRepos/social-media-dashboard/frontend/src/styles.css:85:3: Unknown word border-radius
+11:18:48 AM [vite] hmr update /src/App.jsx
+11:19:02 AM [vite] hmr update /src/App.jsx
+11:19:16 AM [vite] hmr update /src/styles.css
+11:19:46 AM [vite] hmr update /src/App.jsx
+11:19:46 AM [vite] hmr update /src/App.jsx
+11:19:54 AM [vite] hmr update /src/App.jsx
+11:20:02 AM [vite] hmr update /src/App.jsx
+11:20:11 AM [vite] hmr update /src/App.jsx
+frontend/src/styles.css:85:3: Unknown word border-radius
   Plugin: vite:css
   File: /home/user/GitRepos/social-media-dashboard/frontend/src/styles.css:85:2
   83 |    padding: 1rem;
@@ -114,3 +116,10 @@ Port 5173 is in use, trying another one...
 11:10:06 AM [vite] hmr update /src/App.jsx
 11:11:16 AM [vite] hmr update /src/App.jsx
 11:17:08 AM [vite] hmr update /src/App.jsx
+11:18:48 AM [vite] hmr update /src/App.jsx
+11:19:02 AM [vite] hmr update /src/App.jsx
+11:19:16 AM [vite] hmr update /src/styles.css
+11:19:46 AM [vite] hmr update /src/App.jsx
+11:19:54 AM [vite] hmr update /src/App.jsx
+11:20:02 AM [vite] hmr update /src/App.jsx
+11:20:11 AM [vite] hmr update /src/App.jsx
