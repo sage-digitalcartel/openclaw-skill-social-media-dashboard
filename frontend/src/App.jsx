@@ -79,7 +79,6 @@ function App() {
   const [aiLoading, setAiLoading] = useState(false);
   const [aiError, setAiError] = useState('');
   const [aiBrandName, setAiBrandName] = useState(localStorage.getItem('brand_name') || 'Simply Desserts');
-  const [aiExcludeCompetitors, setAiExcludeCompetitors] = useState(true);
   const [researchQuery, setResearchQuery] = useState('');
   const [researchMarket, setResearchMarket] = useState('Global');
   const [researchContext, setResearchContext] = useState(''); // For passing to AI Generate
@@ -243,7 +242,7 @@ IMPORTANT INSTRUCTIONS:
 - ${platformNote}
 - Write as ${aiBrandName} brand
 - Each post should be unique and engaging
-- Include relevant hashtags ${aiExcludeCompetitors ? '- but NO competitor mentions' : ''}`;
+- Include relevant hashtags but NO competitor mentions`;
     }
     
     try {
@@ -1034,17 +1033,6 @@ IMPORTANT INSTRUCTIONS:
                       localStorage.setItem('brand_name', e.target.value);
                     }}
                   />
-                </div>
-                
-                <div className="form-group" style={{marginBottom: 0, display: 'flex', alignItems: 'flex-end', paddingBottom: '0.5rem'}}>
-                  <label style={{display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', whiteSpace: 'nowrap'}}>
-                    <input 
-                      type="checkbox" 
-                      checked={aiExcludeCompetitors}
-                      onChange={(e) => setAiExcludeCompetitors(e.target.checked)}
-                    />
-                    Exclude competitors
-                  </label>
                 </div>
               </div>
               
