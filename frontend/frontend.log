@@ -87,9 +87,9 @@ Port 5173 is in use, trying another one...
 12:16:00 PM [vite] hmr update /src/App.jsx
 12:16:18 PM [vite] hmr update /src/styles.css
 12:18:12 PM [vite] hmr update /src/styles.css
-radius
-  Plugin: vite:css
-  File: /home/user/GitRepos/social-media-dashboard/frontend/src/styles.css:85:2
+12:19:55 PM [vite] hmr update /src/App.jsx
+12:20:10 PM [vite] hmr update /src/App.jsx
+src/styles.css:85:2
   83 |    padding: 1rem;
   84 |    border: 2px solid var(--border);
   85 |    border-radius;
@@ -600,3 +600,5 @@ radius
 12:16:00 PM [vite] hmr update /src/App.jsx
 12:16:18 PM [vite] hmr update /src/styles.css
 12:18:12 PM [vite] hmr update /src/styles.css
+12:19:55 PM [vite] hmr update /src/App.jsx
+12:20:10 PM [vite] hmr update /src/App.jsx

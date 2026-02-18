@@ -101,6 +101,7 @@ function App() {
       setIsAuthenticated(true);
       fetchPosts();
       fetchApiKeys();
+      fetchResearchHistory();
       
       // Auto-fetch channels if Metricool key saved
       const savedMetricoolKey = localStorage.getItem('metricool_key');
@@ -131,6 +132,16 @@ function App() {
       setApiKeys(data.keys || []);
     } catch (e) {
       console.error('Failed to fetch keys:', e);
+    }
+  };
+
+  const fetchResearchHistory = async () => {
+    try {
+      const res = await fetch(`${API_BASE}/api/ai/research`, { headers: authHeader() });
+      const data = await res.json();
+      setResearchHistory(data.results || []);
+    } catch (e) {
+      console.error('Failed to fetch research history:', e);
     }
   };
 
